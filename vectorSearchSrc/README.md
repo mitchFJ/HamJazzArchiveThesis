@@ -12,3 +12,8 @@ For filter.js:
 For displayresults.js: (Work with Reagan on this)
 1. Get the list of documents from the vector search (list of documents may be a hash table array or an XML file)
 2. Display those results onto the website
+
+Filter List Prompts:
+- Dates
+- Material Type
+- Labels
