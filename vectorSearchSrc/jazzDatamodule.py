@@ -25,19 +25,22 @@ class jazzDataModule():
             num += 1
             print(num)
             text = self.exctract_text_from_pdf(pdf).split('MR: ')
+            sentences = [query.strip()]
             for sentence in text:
-                encode = self.tokenize([query.strip(), sentence.strip()])
-                similar = util.cos_sim(encode[0], encode[1])
+                sentences.append(sentence.strip())
+            encode = self.tokenize(sentences)
+            for i in range(1, len(encode)):
+                similar = util.cos_sim(encode[0], encode[i])
                 if (similar > best_respone):
                     print(f"similar: {similar}, best: {best_respone}")
-                    print(sentence.strip())
+                    print(sentences[i])
                     best_respone = similar
                     best_pdf = pdf
-                    best_sentence = sentence.strip()
+                    best_sentence = sentences[i]
             #This is a run to make sure we don't take too long
             #for real cases we will want another algorithm (maybe key word search or fuzzy search)
             #to limit the transcripts we look through
-            if (num > 10):
+            if (num > 20):
                 break
         
         print(best_pdf)
@@ -58,5 +61,6 @@ class jazzDataModule():
             full_text += page.extract_text()
         return full_text
 
+print("A")
 test = jazzDataModule()
 test.evaluate_query("Leanring Jazz in an academic setting")
