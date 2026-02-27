@@ -5,7 +5,7 @@ from pathlib import Path
 def redact(pdf_path, output_path):
     doc = fitz.open(pdf_path)
     rect1 = fitz.Rect(0,0,60,1000)
-    rect2 = fitz.Rect(0,750, 1000, 1100)
+    rect2 = fitz.Rect(0,720, 1000, 1100)
     for page in doc.pages():
         page.add_redact_annot(rect1)
 

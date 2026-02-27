@@ -4,9 +4,7 @@ from pathlib import Path
 
 def save_text():
     input_pdf = Path("Transcripts/output/").glob("*.pdf")
-    text_list = []
-    pdf_list = []
-    page_list = []
+    all_text = []
     num = 0
     for pdf in input_pdf:
         page = 2
@@ -14,18 +12,19 @@ def save_text():
         print(num)
         text = exctract_text_from_pdf(pdf).split('MR: ')
         for i in range(len(text)):
-            text_list.append(text[i].strip())
-            pdf_list.append(pdf)
+            new_text = []
+            new_text.append(text[i].strip())
+            new_text.append(pdf)
             if ("\n" in text[i]):
-                page_list.append((page, page+1))
+                new_text.append((page, page+1))
                 page += 1
             else:
-                page_list.append(page)
-    saved_data = [pdf_list, text_list, page_list]
+                new_text.append(page)
+            all_text.append(new_text.copy())
 
     with open("extracted_text.csv", "w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerows(saved_data)
+        writer.writerows(all_text)
 
 
 def exctract_text_from_pdf(path):
