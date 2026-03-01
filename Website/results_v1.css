@@ -1,0 +1,66 @@
+.collapsible {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: 1px solid #777;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #ccc;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+.column1_obj {
+  float: left;
+  border: 1px solid #df7b01;
+  width: 70%;
+  margin-right: 10px;
+  margin-left: 10px
+}
+
+.filter_box {
+  width: 20%;
+  border: 5px solid #000;
+  float: right;
+  padding: 1%;
+  margin-right: 20px;
+  margin-left: 20px
+}
+
+.search_bar_main {
+  width: 100%;
+  border: 1px solid #000
+}
+
+.hidden {
+    display: none;
+}
+
+.respect_breaks {
+  white-space: pre;
+}
+
+.searchedTagItem {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    list-style: none;
+}
+
+.result_block_long {
+  width: 95%;
+  margin-top: 10px;
+  margin-left: 5px;
+  padding: .5%;
+  border: 1px solid #000
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Fillius Jazz Archive</title>
+        <link rel="stylesheet" type="" href="results_v1.css">
+        <script src="results_v1.js"></script>
+        <!--<script src="jquery.min.js"></script>-->
+    </head>
+
+    <body>
+        <h1 class="heading">Fillius Jazz Archive</h1>
+        <h2 class="heading2">Rights Statement Etc.</h2>
+        <br>
+        <div class="column1_obj">
+            <div class = "search_bar_main">
+                <label for="searchBar">Search the Archive:</label>
+                <input type="text" id="searchBar" name="searchBar"><button class="search_go">Search</button>
+            </div>
+            <div id = "results_container">
+
+            </div>
+        </div>
+        <div class = "filter_box">
+            <h3 class = "heading3">Filters</h3>
+            <button type="button" class="collapsible">Include</button>
+            <div id="include_div", class = "content">
+                <input type="text" id="search_include" placeholder="Search for filter:">
+                <ul id="includeTagsList">
+                    <li class="searchedTagItem hidden">Jazz</li>
+                    <li class="searchedTagItem hidden">Piano</li>
+                    <li class="searchedTagItem hidden">Saxophone</li>
+                    <li class="searchedTagItem hidden">Licorice lichorice lickorish oh whatever</li>
+                    <li class="searchedTagItem hidden">Louis Armstrong</li>
+                </ul>
+
+                <!--<input type="checkbox" name="include_tag" id="include_tag_jazz">
+                <label for="include_tag_jazz">Jazz</label>-->
+                
+            </div>
+            <button type="button" class="collapsible">Exclude</button>
+            <div id="exclude_div", class = "content">
+                <input type="text" id="search_exclude" placeholder="Search for filter:">
+                <ul id="excludeTagsList">
+                    <li class="searchedTagItem hidden">Jazz</li>
+                    <li class="searchedTagItem hidden">Piano</li>
+                    <li class="searchedTagItem hidden">Saxophone</li>
+                    <li class="searchedTagItem hidden">Licorice lichorice lickorish oh whatever</li>
+                    <li class="searchedTagItem hidden">Louis Armstrong</li>
+                </ul>
+                <!--<input type="checkbox" name="exclude_tag" id="exclude_tag_jazz">
+                <span class="indicator" aria-hidden="true"></span><span>Jazzy</span>-->
+            </div>
+            <button class="search_go">Save and Search</button>
+        </div>
+    </body>
+</html>
