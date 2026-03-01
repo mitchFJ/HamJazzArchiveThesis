@@ -17,3 +17,8 @@ Filter List Prompts:
 - Dates
 - Material Type
 - Labels
+
+Questions:
+- How can the JavaScript interact with the Python script from Mitch's code?
+- Can I make the frontend and the backend be Python?
+- Can I use JSON to communicate between the frontend and backend?
