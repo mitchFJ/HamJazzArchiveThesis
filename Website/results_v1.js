@@ -90,9 +90,9 @@ document.addEventListener('DOMContentLoaded', function() {
             var clone_link = new_link.cloneNode(true);
             var clone_desc = new_desc.cloneNode(true);
             clone_result_block.classList.add("result_block_long");
-            clone_link.setAttribute("href","https://drive.google.com/file/d/1V1iLh2zmTjUOAbaCFCidFyBhIH5iCE1J/view?usp=sharing");
-            clone_link.textContent = "Title (Output?)";
-            clone_desc.textContent = "Lorem Ipsum The matching text is here.";
+            clone_link.setAttribute("href",results_found[res_counter][0]);
+            clone_link.textContent = "Title: "+results_found[res_counter][0];
+            clone_desc.textContent = "Page(s): "+results_found[res_counter][1]+" - "+results_found[res_counter][2];
             res_container.append(clone_result_block);
             clone_result_block.append(clone_link);
             clone_result_block.append(clone_desc);
@@ -134,8 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log(exc_list[x]);
             }
         }
-        var pass_to = ["Testing", "Unga", "Bunga","Bunga","Bunga","Bunga","Bunga","Bunga","Bunga"];
-        set_up_results(pass_to);
+        make_database_connection(query)
     }
 
     var all_search_buttons = document.getElementsByClassName("search_go");
@@ -160,28 +159,32 @@ document.addEventListener('DOMContentLoaded', function() {
     //     console.log(string);
 
     //     // Printing our field of our response
-    //     console.log(`Title of our response :  ${string.title}`);
+    //     console.log(`Title of our rssssesponse :  ${string.title}`);
     // })
     // .catch(errorMsg => { console.log(errorMsg); });
+    function make_database_connection(query){
+        console.log("using run_search_funct")
+        fetch("http://127.0.0.1:5000/run_search_funct", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            },
+            body: JSON.stringify({ message: query })
+        })
+        .then(response => response.json())
+        .then(string => {
 
-    fetch("http://127.0.0.1:5000/test_returns", {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE',
-            'Access-Control-Allow-Headers': 'Content-Type'
-        },
-        body: JSON.stringify({ message: "Hello_World" })
-    })
-    .then(response => response.json())
-    .then(string => {
-
-        // Printing our response 
-        console.log(string);
-
-        // Printing our field of our response
-        console.log(`Title of our response :  ${string.title}`);
-    })
-    .catch(errorMsg => { console.log(errorMsg); }); 
+            // Printing our response 
+            console.log(string);
+            console.log(string.answer);
+            console.log(string.answer[0]);
+            // Printing our field of our response
+            console.log(`Title of our response :  ${string.title}`);
+            set_up_results(string.answer);
+        })
+        .catch(errorMsg => { console.log(errorMsg); });
+    }
 });
