@@ -1,6 +1,7 @@
 import csv
 from pypdf import PdfReader
 from pathlib import Path
+import re
 
 def save_text():
     input_pdf = Path("Transcripts/output/").glob("*.pdf")
@@ -10,7 +11,7 @@ def save_text():
         page = 2
         num += 1
         print(num)
-        text = exctract_text_from_pdf(pdf).split('MR: ')
+        text = re.split("[A-Z]{2}:", exctract_text_from_pdf(pdf))
         for i in range(len(text)):
             new_text = []
             new_text.append(text[i].strip())
@@ -24,6 +25,7 @@ def save_text():
 
     with open("extracted_text.csv", "w", newline="") as file:
         writer = csv.writer(file)
+        writer.writerow(["Text","File","Pagenum"])
         writer.writerows(all_text)
 
 

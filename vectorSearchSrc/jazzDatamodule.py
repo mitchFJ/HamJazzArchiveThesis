@@ -1,9 +1,8 @@
-from sklearn.metrics.pairwise import cosine_similarity
 from pathlib import Path
 from sentence_transformers import SentenceTransformer, util
 import pandas as pd
 
-from pypdf import PdfReader
+NUM_RETURN = 5
 
 class jazzDataModule():
     def __init__(self):
@@ -16,10 +15,12 @@ class jazzDataModule():
         self.pdf_list = df["File"]
         self.page_list = df["Pagenum"]
         encode = self.tokenize(self.sentences)
-        self.best_respones = [0, 0, 0, 0, 0]
-        self.best_pdfs = ["", "", "", "", ""]
-        self.best_pages = ["", "", "", "", ""]
-        self.best_sentences = ["", "", "", "", ""]
+
+        self.best_respones = [0 for i in range(NUM_RETURN)]
+        self.best_pdfs = ["" for i in range(NUM_RETURN)]
+        self.best_pages = ["" for i in range(NUM_RETURN)]
+        self.best_sentences = ["" for i in range(NUM_RETURN)]
+        
         for i in range(1, len(encode)):
             similar = util.cos_sim(encode[0], encode[i])
             if (similar > self.best_respones[-1]):
