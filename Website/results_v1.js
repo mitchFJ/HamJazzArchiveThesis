@@ -144,14 +144,35 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // TESTING
+    // fetch("http://127.0.0.1:5000/test_returns", {
+    //     method: 'GET',
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //         'Access-Control-Allow-Origin': '*',
+    //         'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE',
+    //         'Access-Control-Allow-Headers': 'Content-Type'
+    //     }//,body: JSON.stringify({message: "Hello_World"})
+    // })
+    // .then(response => response.json())
+    // .then(string => {
+
+    //     // Printing our response 
+    //     console.log(string);
+
+    //     // Printing our field of our response
+    //     console.log(`Title of our response :  ${string.title}`);
+    // })
+    // .catch(errorMsg => { console.log(errorMsg); });
+
     fetch("http://127.0.0.1:5000/test_returns", {
-        method: 'GET',
+        method: 'POST',
         headers: {
             "Content-Type": "application/json",
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE',
             'Access-Control-Allow-Headers': 'Content-Type'
-        }//,body: JSON.stringify({message: "Hello_World"})
+        },
+        body: JSON.stringify({ message: "Hello_World" })
     })
     .then(response => response.json())
     .then(string => {

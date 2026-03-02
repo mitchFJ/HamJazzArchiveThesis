@@ -16,11 +16,16 @@ def actual_worker():
 def test_returns():
     if request.method == 'POST':
         # Process data sent from JavaScript
-        data = request.json.get("value")
+        data = request.json.get("message")
+        if data is None:
+            return jsonify({"error": "Invalid JSON"}), 400
+        else:
+            print(data)
+            return jsonify({"answer": data})
         print(f"Received data from JS: {data['message']}")
         # Return a response
         result = actual_worker()
-        return jsonify(result)
+        return jsonify({"answer": result})
     else:
         # Handle GET request
         return jsonify({"message": "Hello from Python!"})
