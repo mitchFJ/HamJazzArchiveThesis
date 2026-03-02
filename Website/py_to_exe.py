@@ -21,6 +21,8 @@ def test_returns():
             return jsonify({"error": "Invalid JSON"}), 400
         else:
             print(data)
+            result = actual_worker()
+            return jsonify({"answer": result})
             return jsonify({"answer": data})
         print(f"Received data from JS: {data['message']}")
         # Return a response
