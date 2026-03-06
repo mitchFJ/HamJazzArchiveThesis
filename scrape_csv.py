@@ -1,4 +1,5 @@
 import csv
+import re
 
 file_name = 'Jazz_Interviews - Jazz_Interviews.csv'
 new_file_name = 'test.txt'
@@ -11,6 +12,8 @@ with open(new_file_name, 'w') as file:
 
         for row in csv_reader:
             labels = row['subject_topical']
+            labels = labels[2:len(labels)-2]
+
             file.write(labels + '\n')
 
-print("File '{new_file_name}' created successfully.")
+print(f"File '{new_file_name}' created successfully.")
