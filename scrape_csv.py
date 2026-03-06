@@ -14,6 +14,8 @@ with open(new_file_name, 'w') as file:
             labels = row['subject_topical']
             labels = labels[2:len(labels)-2]
 
-            file.write(labels + '\n')
+            label_list = labels.split('},{')
+
+            file.write(' + '.join(label_list) + '\n')
 
 print(f"File '{new_file_name}' created successfully.")
