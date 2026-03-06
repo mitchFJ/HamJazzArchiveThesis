@@ -1,7 +1,9 @@
 import csv
 
 file_name = 'Jazz_Interviews - Jazz_Interviews.csv'
-new_file_name = 'test.txt'
+new_file_name = 'scraped_labels.txt'
+
+label_list = []
 
 # CITE: https://www.geeksforgeeks.org/python/create-a-new-text-file-in-python/
 with open(new_file_name, 'w') as file:
@@ -19,8 +21,12 @@ with open(new_file_name, 'w') as file:
                 str_start = '"label":"'
                 str_end = '","uri":""'
 
-                label = label[len(str_start):len(label)-len(str_end)]
+                label = label[len(str_start):]
+                label = label[:label.find('"')]
 
-                file.write(label + '\n')
+                if label not in label_list:
+                    label_list.append(label)
+
+        file.write("\n".join(label_list))
 
 print(f"File '{new_file_name}' created successfully.")
