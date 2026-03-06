@@ -1,5 +1,4 @@
 import csv
-import re
 
 file_name = 'Jazz_Interviews - Jazz_Interviews.csv'
 new_file_name = 'test.txt'
@@ -11,11 +10,17 @@ with open(new_file_name, 'w') as file:
         csv_reader = csv.DictReader(csv_file)
 
         for row in csv_reader:
-            labels = row['subject_topical']
-            labels = labels[2:len(labels)-2]
+            topicals = row['subject_topical']
+            topicals = topicals[2:len(topicals)-2]
 
-            label_list = labels.split('},{')
+            topical_list = topicals.split('},{')
 
-            file.write(' + '.join(label_list) + '\n')
+            for label in topical_list:
+                str_start = '"label":"'
+                str_end = '","uri":""'
+
+                label = label[len(str_start):len(label)-len(str_end)]
+
+                file.write(label + '\n')
 
 print(f"File '{new_file_name}' created successfully.")
