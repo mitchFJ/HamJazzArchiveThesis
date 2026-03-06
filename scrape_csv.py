@@ -1,3 +1,7 @@
+# Scrapes Subject Topicals column of the CSV file
+
+# Notes: Improve efficiency of scrape
+
 import csv
 
 file_name = 'Jazz_Interviews - Jazz_Interviews.csv'
@@ -19,7 +23,6 @@ with open(new_file_name, 'w') as file:
 
             for label in topical_list:
                 str_start = '"label":"'
-                str_end = '","uri":""'
 
                 label = label[len(str_start):]
                 label = label[:label.find('"')]
