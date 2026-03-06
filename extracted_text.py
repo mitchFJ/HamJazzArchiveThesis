@@ -2,31 +2,49 @@ import csv
 from pypdf import PdfReader
 from pathlib import Path
 import re
+from sentence_transformers import SentenceTransformer, util
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
 
 def save_text():
+    cred = credentials.Certificate("fillius-jazz-archive-search-firebase-adminsdk-fbsvc-cda02f015f.json")
+    firebase_admin.initialize_app(cred, {'databaseURL': 'https://fillius-jazz-archive-search-default-rtdb.firebaseio.com'})
+    ref = db.reference('/')
     input_pdf = Path("Transcripts/output/").glob("*.pdf")
-    all_text = []
     num = 0
+    key = 0
     for pdf in input_pdf:
+        all_text = []
+        all_pdf = []
+        all_pages = []
         page = 2
         num += 1
         print(num)
         text = re.split("[A-Z]{2}:", exctract_text_from_pdf(pdf))
         for i in range(len(text)):
-            new_text = []
-            new_text.append(text[i].strip())
-            new_text.append(pdf)
+            all_text.append(text[i].strip())
+            all_pdf.append(pdf)
             if ("\n" in text[i]):
-                new_text.append((page, page+1))
+                all_pages.append((page, page+1))
                 page += 1
             else:
-                new_text.append(page)
-            all_text.append(new_text.copy())
+                all_pages.append(page)
 
-    with open("extracted_text.csv", "w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(["Text","File","Pagenum"])
-        writer.writerows(all_text)
+        encoding = tokenize(all_text)
+
+        grouped_text = {}
+        for i in range(len(all_text)):
+            grouped_text[key + i] = [all_text[i], encoding[i].tolist(), str(all_pdf[i]), all_pages[i]]
+        key += len(all_text)
+
+        ref.update(grouped_text)
+
+model = SentenceTransformer('all-MiniLM-L6-v2')
+def tokenize(text):
+    encoding = model.encode(text)
+    return encoding
+
 
 
 def exctract_text_from_pdf(path):
