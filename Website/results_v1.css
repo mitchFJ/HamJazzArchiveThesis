@@ -23,7 +23,7 @@
 
 .column1_obj {
   float: left;
-  border: 1px solid #df7b01;
+  /*border: 1px solid #df7b01;*/
   width: 70%;
   margin-right: 10px;
   margin-left: 10px
@@ -39,8 +39,8 @@
 }
 
 .search_bar_main {
-  width: 100%;
-  border: 1px solid #000
+  width: 100%/*;
+  border: 1px solid #000*/
 }
 
 .hidden {
@@ -63,4 +63,41 @@
   margin-left: 5px;
   padding: .5%;
   border: 1px solid #000
+}
+
+.head_column1_obj {
+  float: left;
+  display: flex;
+  align-items: center;
+  width: 75%;
+  margin-right: 10px;
+  margin-left: 10px;
+  color: #ffffff;
+}
+
+.head_column2_obj {
+  display: flex;
+  float: right;
+  width: 25%;
+  margin-right: 10px;
+  margin-left: 10px;
+  align-items: right;
+  justify-content: right;
+}
+
+.head_container {
+  display: flex;
+  /*border: 3px solid #9cdf01;*/
+  background-color: #000a42
+}
+
+.logo_obj {
+  width: 100%;
+  height: auto
+}
+
+h1 {
+  font-size: 100px;
+  margin-left: 25px;
+
 }
