@@ -1,7 +1,35 @@
-import pandas as pd
+# Scrapes Subject Topicals column of the CSV file
 
-csv_file = 'Jazz_Interviews - Jazz_Interviews.csv'
+# Notes: Improve efficiency of scrape
 
-# CITE: https://www.geeksforgeeks.org/pandas/reading-specific-columns-of-a-csv-file-using-pandas/
-df = pd.read_csv(csv_file, usecols=['subject_topical'])
-print(df)
+import csv
+
+file_name = 'Jazz_Interviews - Jazz_Interviews.csv'
+new_file_name = 'scraped_labels.txt'
+
+label_list = []
+
+# CITE: https://www.geeksforgeeks.org/python/create-a-new-text-file-in-python/
+with open(new_file_name, 'w') as file:
+    # CITE: https://docs.python.org/3/library/csv.html
+    with open(file_name, newline='') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+
+        for row in csv_reader:
+            topicals = row['subject_topical']
+            topicals = topicals[2:len(topicals)-2]
+
+            topical_list = topicals.split('},{')
+
+            for label in topical_list:
+                str_start = '"label":"'
+
+                label = label[len(str_start):]
+                label = label[:label.find('"')]
+
+                if label not in label_list:
+                    label_list.append(label)
+
+        file.write("\n".join(label_list))
+
+print(f"File '{new_file_name}' created successfully.")
