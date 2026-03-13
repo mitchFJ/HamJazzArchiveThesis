@@ -1,47 +1,27 @@
-from pathlib import Path
 from sentence_transformers import SentenceTransformer, util
 import pandas as pd
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import db
+import numpy as np
+from pathlib import Path
 
 NUM_RETURN = 5
 
 class jazzDataModule():
     def __init__(self):
-        cred = credentials.Certificate("fillius-jazz-archive-search-firebase-adminsdk-fbsvc-cda02f015f.json")
-        firebase_admin.initialize_app(cred, {'databaseURL': 'https://fillius-jazz-archive-search-default-rtdb.firebaseio.com'})
-        ref = db.reference('/')
-
-        self.sentences = []
-        self.encode_list = []
-        self.pdf_list = []
-        self.page_list = []
-        last_key = 0
+        csv_file = Path("Utilities/extracted_text.csv")
+        db = pd.read_csv(csv_file)
+        self.sentences = db["text"]
+        self.pdf_list = db["pdf"]
+        self.page_list = db["pagenum"]
         
-        while True:
-            docs = ref.order_by_key().start_at(str(last_key)).limit_to_first(30000)
-            
-            segment = docs.get()
-            if segment == None:
-                break
-
-            for i in range(last_key, len(segment)):
-                self.sentences.append(segment[i][0])
-                self.encode_list.append(segment[i][1].copy())
-                self.pdf_list.append(segment[i][2])
-                self.page_list.append(segment[i][3])
-
-            last_key += len(segment)
-            print("page done")
+        encode_file = Path("Utilities/embeddings.npy")
+        self.encode_list = np.load(encode_file)
 
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
 
             
 
     def evaluate_query(self, query):
-        df = pd.read_csv("extracted_text.csv")
-        query_encode = self.tokenize(query)
+        query_encode = self.tokenize(query).astype(np.float64)
         
         self.best_respones = [0 for i in range(NUM_RETURN)]
         self.best_pdfs = ["" for i in range(NUM_RETURN)]

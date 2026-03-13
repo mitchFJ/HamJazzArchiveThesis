@@ -1,4 +1,3 @@
-import csv
 from pypdf import PdfReader
 from pathlib import Path
 import re
