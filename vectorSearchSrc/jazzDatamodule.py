@@ -7,13 +7,13 @@ NUM_RETURN = 5
 
 class jazzDataModule():
     def __init__(self):
-        csv_file = Path("Utilities/extracted_text.csv")
+        csv_file = Path("Data/extracted_text.csv")
         db = pd.read_csv(csv_file)
         self.sentences = db["text"]
         self.pdf_list = db["pdf"]
         self.page_list = db["pagenum"]
         
-        encode_file = Path("Utilities/embeddings.npy")
+        encode_file = Path("Data/embeddings.npy")
         self.encode_list = np.load(encode_file)
 
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
