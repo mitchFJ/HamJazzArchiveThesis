@@ -1,9 +1,11 @@
-from sklearn.metrics.pairwise import cosine_similarity
-from pathlib import Path
+from pypdf import PdfReader
+
 from sentence_transformers import SentenceTransformer, util
 import pandas as pd
+import numpy as np
+from pathlib import Path
 
-from pypdf import PdfReader
+NUM_RETURN = 5
 
 # Website Communication Imports
 from flask import Flask, jsonify, request
@@ -19,26 +21,31 @@ CSV_PATH = '../extracted_text.csv'
 # Search funct class - BEGIN
 class jazzDataModule():
     def __init__(self):
+        csv_file = Path("../Data/extracted_text.csv")
+        db = pd.read_csv(csv_file)
+        self.sentences = db["text"]
+        self.pdf_list = db["pdf"]
+        self.page_list = db["pagenum"]
+        
+        encode_file = Path("../Data/embeddings.npy")
+        self.encode_list = np.load(encode_file)
+
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
 
+            
+
     def evaluate_query(self, query):
-        df = pd.read_csv(CSV_PATH)
-        self.sentences = [query]
-        self.sentences.extend(df["Text"])
-        self.pdf_list = df["File"]
-        self.page_list = df["Pagenum"]
-        print("Tokenizing...")
-        encode = self.tokenize(self.sentences)
-        self.best_respones = [0, 0, 0, 0, 0]
-        self.best_pdfs = ["", "", "", "", ""]
-        self.best_pages = ["", "", "", "", ""]
-        self.best_sentences = ["", "", "", "", ""]
-        print("Checking for similar...")
-        for i in range(1, len(encode)):
-            similar = util.cos_sim(encode[0], encode[i])
+        query_encode = self.tokenize(query).astype(np.float64)
+        
+        self.best_respones = [0 for i in range(NUM_RETURN)]
+        self.best_pdfs = ["" for i in range(NUM_RETURN)]
+        self.best_pages = ["" for i in range(NUM_RETURN)]
+        self.best_sentences = ["" for i in range(NUM_RETURN)]
+        
+        for i in range(len(self.encode_list)):
+            similar = util.cos_sim(query_encode, self.encode_list[i])
             if (similar > self.best_respones[-1]):
                 self.insert_response(i, similar)
-        print("Formulating response...")
         response = []
         for i in range(len(self.best_respones)):
             this_response = [self.best_pdfs[i], self.best_pages[i], self.best_sentences[i]]
@@ -50,9 +57,9 @@ class jazzDataModule():
             if similar > self.best_respones[i]:
                 self.best_respones.insert(i, similar)
                 self.best_respones.pop()
-                self.best_pdfs.insert(i, self.pdf_list[index - 1])
+                self.best_pdfs.insert(i, self.pdf_list[index])
                 self.best_pdfs.pop()
-                self.best_pages.insert(i,self.page_list[index - 1])
+                self.best_pages.insert(i,self.page_list[index])
                 self.best_pages.pop()
                 self.best_sentences.insert(i, self.sentences[index])
                 self.best_sentences.pop()

@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     console.log("Filters_Test")
     get_filters_connection()
+    var tag_list_master = [];
 
     function create_all_tags(tag_list){
         // ADDING ALL TAGS - Proof of Concept. Make into function, call for both include and exclude OR copy each entry and apply to both in one??
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var new_li_elem_copy = new_li_elem.cloneNode(true)
             new_li_elem_copy.classList.add('hidden');
             eTL_init.appendChild(new_li_elem_copy)
+            tag_list_master.push(tag_list[x])
         }
     }
 
@@ -120,16 +122,18 @@ document.addEventListener('DOMContentLoaded', function() {
     function get_active_filters() {
         var inc_list = [];
         var exc_list = [];
-        for (var check_count = 0; check_count < testing_list.length; check_count++) {
-            var curr_checkbox_inc = document.getElementById("include_tag_"+testing_list[check_count].toLowerCase());
-            var curr_checkbox_exc = document.getElementById("exclude_tag_"+testing_list[check_count].toLowerCase());
+        console.log("tag_list_master length: " + tag_list_master.length)
+        for (var check_count = 0; check_count < tag_list_master.length; check_count++) {
+            console.log(tag_list_master[check_count])
+            var curr_checkbox_inc = document.getElementById("include_tag_"+tag_list_master[check_count].toLowerCase());
+            var curr_checkbox_exc = document.getElementById("exclude_tag_"+tag_list_master[check_count].toLowerCase());
             if (curr_checkbox_inc && curr_checkbox_inc.checked) {
-                inc_list.push(testing_list[check_count]);
-                console.log(testing_list[check_count])
+                inc_list.push(tag_list_master[check_count]);
+                console.log(tag_list_master[check_count])
             }
             if (curr_checkbox_exc && curr_checkbox_exc.checked) {
-                exc_list.push(testing_list[check_count]);
-                console.log(testing_list[check_count])
+                exc_list.push(tag_list_master[check_count]);
+                console.log(tag_list_master[check_count])
             }
         }
         return inc_list, exc_list;
@@ -152,6 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log(exc_list[x]);
             }
         }
+        console.log("About to connect...")
         make_database_connection(query)
     }
 
