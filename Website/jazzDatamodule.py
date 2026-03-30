@@ -9,12 +9,14 @@ from pypdf import PdfReader
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import csv
+import json
 
 # Websire Communication Setup - App and CSV path
 app = Flask(__name__)
 CORS(app)
 CSV_PATH = '../extracted_text.csv'
 
+# Search funct class - BEGIN
 class jazzDataModule():
     def __init__(self):
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -59,14 +61,76 @@ class jazzDataModule():
     def tokenize(self, text):
         encoding = self.model.encode(text)
         return encoding
+# Search funct class - END
 
+# Search funct class activation
 def search_only_query(query):
     test = jazzDataModule()
     print("Beginning search...")
     results_of_search = test.evaluate_query(query)
     return results_of_search
 
-# The handler for communication events
+# Filter-related code - BEGIN -
+doc_name = 'label'
+labels_name = 'subject_topical'
+
+include_list = []
+exclude_list = []
+
+include_docs = []
+exclude_docs = []
+
+file_name = '../Data/Jazz_Interviews - Jazz_Interviews.csv'
+
+def check_list(doc_list, new_doc_list, label_list, is_included):
+    for row in doc_list:
+        for label in label_list:
+            if label in row[labels_name]:
+                if is_included:
+                    new_doc_list.append(dict(label = row[doc_name], subject_topical = row[labels_name]))
+                break
+
+            if not is_included:
+                new_doc_list.append(dict(label = row[doc_name], subject_topical = row[labels_name]))
+    return
+
+# with open(file_name, newline='') as csv_file:
+#     csv_reader = csv.DictReader(csv_file)
+
+#     if len(include_list) > 0:
+#         check_list(csv_reader, include_docs, include_list, True)
+#     else:
+#         for row in csv_reader:
+#             include_docs.append(dict(label = row[doc_name], subject_topical = row[labels_name]))
+
+# if len(exclude_list) > 0:
+#     check_list(include_docs, exclude_docs, exclude_list, False)
+# else:
+#     exclude_docs = include_docs
+
+def get_list_of_labels():
+    label_list = []
+    with open(file_name, newline='') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader:
+            include_docs.append(dict(label = row[doc_name], subject_topical = row[labels_name]))
+            print(row[labels_name])
+            labels_here = json.loads(row[labels_name])
+            for index in range(len(labels_here)):
+                print(f"INDEXth: {labels_here[index]}")
+                print(f"       : {labels_here[index]['label']}")
+                if labels_here[index]['label'] not in label_list:
+                    label_list.append(labels_here[index]['label'])
+                else:
+                    print("         -Already included.-")
+    for label in label_list:
+        print(label, end=', ')
+    print()
+    return label_list
+
+# Filter-related code - END -
+
+# The handler for communication events: Search
 @app.route('/run_search_funct', methods=['GET', 'POST'])
 def run_search_funct():
     if request.method == 'POST':
@@ -85,6 +149,17 @@ def run_search_funct():
     else:
         # Handle GET request
         return jsonify({"message": "Hello from jazzDatamodule.py!"})
+
+# Handler: Filters
+@app.route('/run_filters_funct', methods=['GET', 'POST'])
+def filters_funct():
+    if request.method == 'GET':
+        label_list_answer = get_list_of_labels()
+        return jsonify({"answer": label_list_answer})
+    elif request.method == 'POST':
+        return
+    else:
+        return jsonify({"message": "Hello from jazzDatamodule.py - the filters!"})
 
 if __name__ == "__main__":
     # Run the server on http://127.0.0.1:5000
