@@ -15,33 +15,50 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    console.log("Filters_Test")
+    get_filters_connection()
 
-    // ADDING ALL TAGS - Proof of Concept. Make into function, call for both include and exclude OR copy each entry and apply to both in one??
-    var testing_list = ["obtuse","rubber goose","footloose","I don't know","the rest"]
-    const inc_place = document.getElementById('include_div');
-    const exc_place = document.getElementById('exclude_div');
-    const br = document.createElement('br');
-    for (var x = 0; x < testing_list.length; x++) {
-        var new_check = document.createElement('input');
-        new_check.setAttribute("type","checkbox");
-        new_check.setAttribute("name","include_tag");
-        new_check.setAttribute("id","include_tag_"+testing_list[x].toLowerCase());
-        var new_label = document.createElement('label');
-        new_label.setAttribute("for","include_tag_"+testing_list[x].toLowerCase());
-        new_label.classList.add("respect_breaks")
-        new_label.textContent = testing_list[x]+'\n';
-        new_check_clone = new_check.cloneNode(true);
-        new_label_clone = new_label.cloneNode(true);
-        inc_place.append(new_check);
-        inc_place.append(new_label);
-        exc_place.append(new_check_clone);
-        exc_place.append(new_label_clone);
+    function create_all_tags(tag_list){
+        // ADDING ALL TAGS - Proof of Concept. Make into function, call for both include and exclude OR copy each entry and apply to both in one??
+        // var testing_list = ["obtuse","rubber goose","footloose","I don't know","the rest"]
+        const inc_place = document.getElementById('include_div');
+        const exc_place = document.getElementById('exclude_div');
+        const br = document.createElement('br');
+        const iTL_init = document.getElementById('includeTagsList');
+        const eTL_init = document.getElementById('excludeTagsList');
+        const li_elem = document.createElement("li");
+        for (var x = 0; x < tag_list.length; x++) {
+            if (x<5) {
+                var new_check = document.createElement('input');
+                new_check.setAttribute("type","checkbox");
+                new_check.setAttribute("name","include_tag");
+                new_check.setAttribute("id","include_tag_"+tag_list[x].toLowerCase());
+                var new_label = document.createElement('label');
+                new_label.setAttribute("for","include_tag_"+tag_list[x].toLowerCase());
+                new_label.classList.add("respect_breaks")
+                new_label.textContent = tag_list[x]+'\n';
+                new_check_clone = new_check.cloneNode(true);
+                new_label_clone = new_label.cloneNode(true);
+                inc_place.append(new_check);
+                inc_place.append(new_label);
+                exc_place.append(new_check_clone);
+                exc_place.append(new_label_clone);
+            }
+            // override ul
+            var new_li_elem = li_elem.cloneNode(true)
+            new_li_elem.textContent = tag_list[x]
+            new_li_elem.classList.add('hidden');
+            iTL_init.appendChild(new_li_elem)
+            var new_li_elem_copy = new_li_elem.cloneNode(true)
+            new_li_elem_copy.classList.add('hidden');
+            eTL_init.appendChild(new_li_elem_copy)
+        }
     }
 
     var iTL = document.getElementById('includeTagsList');
-    var includeTags = iTL.getElementsByTagName('li');
-
     var eTL = document.getElementById('excludeTagsList');
+
+    var includeTags = iTL.getElementsByTagName('li');
     var excludeTags = eTL.getElementsByTagName('li');
 
     // Included Tags Search
@@ -77,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     })
+    
     // Search
     function set_up_results(results_found) {
         var res_container = document.getElementById("results_container");
@@ -142,26 +160,6 @@ document.addEventListener('DOMContentLoaded', function() {
         all_search_buttons[search_button_enum].addEventListener("click", search_archive);
     }
 
-    // TESTING
-    // fetch("http://127.0.0.1:5000/test_returns", {
-    //     method: 'GET',
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         'Access-Control-Allow-Origin': '*',
-    //         'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE',
-    //         'Access-Control-Allow-Headers': 'Content-Type'
-    //     }//,body: JSON.stringify({message: "Hello_World"})
-    // })
-    // .then(response => response.json())
-    // .then(string => {
-
-    //     // Printing our response 
-    //     console.log(string);
-
-    //     // Printing our field of our response
-    //     console.log(`Title of our rssssesponse :  ${string.title}`);
-    // })
-    // .catch(errorMsg => { console.log(errorMsg); });
     function make_database_connection(query){
         console.log("using run_search_funct")
         fetch("http://127.0.0.1:5000/run_search_funct", {
@@ -184,6 +182,29 @@ document.addEventListener('DOMContentLoaded', function() {
             // Printing our field of our response
             console.log(`Title of our response :  ${string.title}`);
             set_up_results(string.answer);
+        })
+        .catch(errorMsg => { console.log(errorMsg); });
+    }
+
+    function get_filters_connection(){
+        console.log("using run_filters_funct")
+        fetch("http://127.0.0.1:5000/run_filters_funct", {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            }
+        })
+        .then(response => response.json())
+        .then(string => {
+
+            // Printing our response 
+            console.log(string);
+            console.log(string.answer);
+            console.log(string.answer[0]);
+            create_all_tags(string.answer)
         })
         .catch(errorMsg => { console.log(errorMsg); });
     }
