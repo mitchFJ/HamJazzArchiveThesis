@@ -11,7 +11,7 @@ def save_text():
     cred = credentials.Certificate("fillius-jazz-archive-search-firebase-adminsdk-fbsvc-cda02f015f.json")
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://fillius-jazz-archive-search-default-rtdb.firebaseio.com'})
     ref = db.reference('/')
-    input_pdf = Path("../Data/Transcripts/output/").glob("*.pdf")
+    input_pdf = Path("Data/Transcripts/output/").glob("*.pdf")
     num = 0
     key = 0
     for pdf in input_pdf:
