@@ -5,12 +5,13 @@ from sentence_transformers import SentenceTransformer, util
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+from remove_linenum import redact_all
 
 def save_text():
     cred = credentials.Certificate("fillius-jazz-archive-search-firebase-adminsdk-fbsvc-cda02f015f.json")
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://fillius-jazz-archive-search-default-rtdb.firebaseio.com'})
     ref = db.reference('/')
-    input_pdf = Path("Transcripts/output/").glob("*.pdf")
+    input_pdf = Path("Data/Transcripts/output/").glob("*.pdf")
     num = 0
     key = 0
     for pdf in input_pdf:
@@ -39,8 +40,8 @@ def save_text():
 
         ref.update(grouped_text)
 
-model = SentenceTransformer('all-MiniLM-L6-v2')
 def tokenize(text):
+    model = SentenceTransformer('all-MiniLM-L6-v2')
     encoding = model.encode(text)
     return encoding
 
@@ -57,4 +58,5 @@ def exctract_text_from_pdf(path):
     return full_text
 
 if __name__ == "__main__":
+    redact_all()
     save_text()

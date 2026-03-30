@@ -37,11 +37,11 @@ def main():
         "pdf": pdf_list,
         "pagenum": page_list
     }
-    csv_file = Path("Utilities/extracted_text.csv")
+    csv_file = Path("Data/extracted_text.csv")
     df = pd.DataFrame(data)
     df.to_csv(csv_file, index=False)
 
-    encode_file = Path("Utilities/embeddings.npy")
+    encode_file = Path("Data/embeddings.npy")
     np.save(encode_file, encode_list)
 
 

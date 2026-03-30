@@ -18,10 +18,11 @@ def redact(pdf_path, output_path):
     doc.save(output_path, garbage=3, deflate=True)
     doc.close()
 
-if __name__ == "__main__":
-    input_pdf = Path(".").glob("*.pdf")
-    pdf_num = 1
+def redact_all():
+    input_pdf = Path("Data/Transcripts").glob("*.pdf")
     for pdf in input_pdf:
-        output = "output/num"+str(pdf_num)+".pdf"
+        output = "Data/Transcripts/output/" + str(pdf)[17:]
         redact(pdf, output)
-        pdf_num += 1
+
+if __name__ == "__main__":
+    redact_all()
