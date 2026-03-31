@@ -18,6 +18,7 @@ def check_list(doc_list, new_doc_list, label_list, is_included):
         else:
             if not is_included:
                 new_doc_list.append(doc)
+    return
 
 # Checks to see if there are any filters active in the documents
 def filter_docs(doc_list, include_list, exclude_list):
