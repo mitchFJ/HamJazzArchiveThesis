@@ -1,11 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     var coll = document.getElementsByClassName("collapsible");
-    var i;
+    var collapsi;
+    var displayed_tags_inc = 0;
+    var displayed_tags_exc = 0;
+    var max_displayed_tags = 10;
     console.log("Hello World");
     console.log(coll.length);
-    for (i = 0; i < coll.length; i++) {
-        console.log(coll[i]);
-        coll[i].addEventListener("click", function() {
+    for (collapsi = 0; collapsi < coll.length; collapsi++) {
+        console.log(coll[collapsi]);
+        coll[collapsi].addEventListener("click", function() {
             this.classList.toggle("active");
             var content = this.nextElementSibling;
             if (content.style.display === "block") {
@@ -18,48 +21,151 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("Filters_Test")
     get_filters_connection()
     var tag_list_master = [];
+    const inc_place = document.getElementById('include_div');
+    const exc_place = document.getElementById('exclude_div');
 
     function create_all_tags(tag_list){
         // ADDING ALL TAGS - Proof of Concept. Make into function, call for both include and exclude OR copy each entry and apply to both in one??
         // var testing_list = ["obtuse","rubber goose","footloose","I don't know","the rest"]
-        const inc_place = document.getElementById('include_div');
-        const exc_place = document.getElementById('exclude_div');
         const br = document.createElement('br');
         const iTL_init = document.getElementById('includeTagsList');
         const eTL_init = document.getElementById('excludeTagsList');
         const li_elem = document.createElement("li");
         for (var x = 0; x < tag_list.length; x++) {
-            if (x<5) {
-                var new_check = document.createElement('input');
-                new_check.setAttribute("type","checkbox");
-                new_check.setAttribute("name","include_tag");
-                new_check.setAttribute("id","include_tag_"+tag_list[x].toLowerCase());
-                var new_label = document.createElement('label');
-                new_label.setAttribute("for","include_tag_"+tag_list[x].toLowerCase());
-                new_label.classList.add("respect_breaks")
-                new_label.textContent = tag_list[x]+'\n';
-                new_check_clone = new_check.cloneNode(true);
-                new_label_clone = new_label.cloneNode(true);
-                inc_place.append(new_check);
-                inc_place.append(new_label);
-                exc_place.append(new_check_clone);
-                exc_place.append(new_label_clone);
+            var new_check = document.createElement('input');
+            new_check.setAttribute("type","checkbox");
+            new_check.setAttribute("name","include_tag");
+            new_check.setAttribute("id","include_tag_"+tag_list[x].toLowerCase());
+            var new_label = document.createElement('label');
+            new_label.setAttribute("id","include_label_"+tag_list[x].toLowerCase());
+            new_label.setAttribute("for","include_tag_"+tag_list[x].toLowerCase());
+            new_label.classList.add("respect_breaks")
+            new_label.textContent = tag_list[x]+'\n';
+            if (x>4){
+                new_check.classList.add("hidden")
+                new_label.classList.add("hidden")
             }
+            else{
+
+                displayed_tags_inc+=1;
+                console.log("Disp_tags_inc"+displayed_tags_inc)
+                displayed_tags_exc+=1;
+            }
+            new_check_clone = new_check.cloneNode(true);
+            new_label_clone = new_label.cloneNode(true);
+            // Make sure to update names and ids for exclude
+            inc_place.append(new_check);
+            inc_place.append(new_label);
+            exc_place.append(new_check_clone);
+            exc_place.append(new_label_clone);
+            
             // override ul
-            var new_li_elem = li_elem.cloneNode(true)
-            new_li_elem.textContent = tag_list[x]
+            var new_li_elem = li_elem.cloneNode(true);
+            new_li_elem.textContent = tag_list[x];
             new_li_elem.classList.add('hidden');
             new_li_elem.classList.add('searchedTagItem');
-            iTL_init.appendChild(new_li_elem)
-            var new_li_elem_copy = new_li_elem.cloneNode(true)
+            iTL_init.appendChild(new_li_elem);
+            var new_li_elem_copy = new_li_elem.cloneNode(true);
             //new_li_elem_copy.classList.add('hidden');
-            eTL_init.appendChild(new_li_elem_copy)
-            tag_list_master.push(tag_list[x])
+            eTL_init.appendChild(new_li_elem_copy);
+            tag_list_master.push(tag_list[x]);
         }
     }
 
     var iTL = document.getElementById('includeTagsList');
     var eTL = document.getElementById('excludeTagsList');
+
+    // Detect new tag selection from tag search
+    iTL.addEventListener('click', function(event){
+        const searched_li_elem = event.target;
+        const searched_text_cont = searched_li_elem.textContent;
+        // prepending and appending removes from cuur loc in elem
+        var clicked_tag_to_be_shown = document.getElementById("include_tag_"+searched_text_cont.toLowerCase());
+        var clicked_label_to_be_shown = document.getElementById("include_label_"+searched_text_cont.toLowerCase());
+        clicked_tag_to_be_shown.classList.remove('hidden');
+        clicked_label_to_be_shown.classList.remove('hidden');
+        displayed_tags_inc+=1;
+        console.log("Disp_tags_inc"+displayed_tags_inc)
+        clicked_tag_to_be_shown.checked = !clicked_tag_to_be_shown.checked;
+        // Puts it at top if newly checked
+        if (clicked_tag_to_be_shown.checked){
+            inc_place.insertBefore(clicked_label_to_be_shown,inc_place.children[2])
+            inc_place.insertBefore(clicked_tag_to_be_shown,inc_place.children[2])
+        }
+        
+    });
+    // balance
+    inc_place.addEventListener('click', function(event){
+        const clicked_inc_elem = event.target;
+        const id_pref = clicked_inc_elem.id.substring(0,12);
+        const id_spef = clicked_inc_elem.id.substring(12)
+        console.log("Id: "+clicked_inc_elem.id)
+        console.log("Id: "+clicked_inc_elem.id.substring(0,12))
+        console.log("Id: "+clicked_inc_elem.id.substring(12))
+        console.log("Disp_tags_inc"+displayed_tags_inc)
+        if (id_pref == "include_tag_"){
+            incl_tag_focused = clicked_inc_elem
+            incl_label_focused = document.getElementById("include_label_"+id_spef)
+            if (clicked_inc_elem.checked){
+                inc_place.insertBefore(incl_label_focused,inc_place.children[2]);
+                inc_place.insertBefore(incl_tag_focused,inc_place.children[2]);
+            }
+            else{
+                if (displayed_tags_inc<max_displayed_tags){
+                    console.log(inc_place.children[2].id)
+                    console.log(inc_place.children[3].id)
+                    console.log(inc_place.children[4].id)
+                    console.log(inc_place.children[5].id)
+
+                    var index_of_tag_focused = Array.prototype.indexOf.call(inc_place.children, incl_tag_focused);
+                    var index_of_label_focused = index_of_tag_focused+1;
+                    var target_of_tag_focused = max_displayed_tags*2+1;
+                    var target_of_label_focused = max_displayed_tags*2+2;
+                    var found_space = false;
+                    var iterable_unfocused = index_of_tag_focused + 2;
+
+                    while (!found_space && iterable_unfocused<displayed_tags_inc*2+3) {
+                        console.log("Curr Box: " + inc_place.children[iterable_unfocused].id);
+                        if (!inc_place.children[iterable_unfocused].checked){
+                            found_space = true;
+                            target_of_tag_focused = iterable_unfocused;
+                            target_of_label_focused = iterable_unfocused+1;
+                            console.log("New: "+target_of_tag_focused+", "+target_of_label_focused)
+                        }
+                        iterable_unfocused+=2;
+                    }
+
+                    inc_place.insertBefore(incl_label_focused,inc_place.children[target_of_label_focused]);
+                    inc_place.insertBefore(incl_tag_focused,inc_place.children[target_of_tag_focused]);
+                    console.log("Ending Box: " + inc_place.children[target_of_tag_focused].id);
+                    console.log("Ending Label: " + inc_place.children[target_of_label_focused].id);
+
+                }
+                else{
+                    var index_of_tag_focused = Array.prototype.indexOf.call(inc_place.children, incl_tag_focused);
+                    var index_of_label_focused = index_of_tag_focused+1;
+                    var target_of_tag_focused = displayed_tags_inc*2+2;
+                    var target_of_label_focused = displayed_tags_inc*2+3;
+                    // while (!found_space && iterable_unfocused==displayed_tags_inc*2+2) {
+                    //     if (!inc_place.children[iterable_unfocused.checked]){
+                    //         found_space = true;
+                    //         target_of_tag_focused = iterable_unfocused;
+                    //         target_of_label_focused = iterable_unfocused+1;
+                    //     }
+                    //     iterable_unfocused+=2;
+                    // }
+
+                    inc_place.insertBefore(incl_label_focused,inc_place.children[target_of_label_focused]);
+                    inc_place.insertBefore(incl_tag_focused,inc_place.children[target_of_tag_focused]);
+                    console.log("Ending Box: " + inc_place.children[displayed_tags_inc*2+1].id);
+                    console.log("Ending Label: " + inc_place.children[displayed_tags_inc*2+2].id);
+                    inc_place.children[displayed_tags_inc*2+1].classList.add("hidden")
+                    inc_place.children[displayed_tags_inc*2+2].classList.add("hidden")
+                    displayed_tags_inc-=1
+                }
+            }
+        }
+    });
 
     var includeTags = iTL.getElementsByTagName('li');
     var excludeTags = eTL.getElementsByTagName('li');
@@ -97,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     })
-    
+
     // Search
     function set_up_results(results_found) {
         var res_container = document.getElementById("results_container");
@@ -125,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var exc_list = [];
         console.log("tag_list_master length: " + tag_list_master.length)
         for (var check_count = 0; check_count < tag_list_master.length; check_count++) {
-            console.log(tag_list_master[check_count])
+            //console.log(tag_list_master[check_count])
             var curr_checkbox_inc = document.getElementById("include_tag_"+tag_list_master[check_count].toLowerCase());
             var curr_checkbox_exc = document.getElementById("exclude_tag_"+tag_list_master[check_count].toLowerCase());
             if (curr_checkbox_inc && curr_checkbox_inc.checked) {
@@ -137,6 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log(tag_list_master[check_count])
             }
         }
+        console.log("inc_list len"+inc_list.length)
         return inc_list, exc_list;
     }
 
