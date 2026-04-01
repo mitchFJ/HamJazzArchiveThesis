@@ -49,9 +49,10 @@ document.addEventListener('DOMContentLoaded', function() {
             var new_li_elem = li_elem.cloneNode(true)
             new_li_elem.textContent = tag_list[x]
             new_li_elem.classList.add('hidden');
+            new_li_elem.classList.add('searchedTagItem');
             iTL_init.appendChild(new_li_elem)
             var new_li_elem_copy = new_li_elem.cloneNode(true)
-            new_li_elem_copy.classList.add('hidden');
+            //new_li_elem_copy.classList.add('hidden');
             eTL_init.appendChild(new_li_elem_copy)
             tag_list_master.push(tag_list[x])
         }
