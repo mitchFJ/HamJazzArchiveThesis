@@ -309,12 +309,24 @@ document.addEventListener('DOMContentLoaded', function() {
         var new_result_block = document.createElement('div');
         var new_link = document.createElement('a');
         var new_desc = document.createElement('p');
+        var is_even = false;
+
+        var show_res_num = document.createElement('p');
+        show_res_num.setAttribute("id","show_res_num");
+        show_res_num.textContent = results_found.length + " results found. Displaying 5 out of " + results_found.length + ".";
+        res_container.append(show_res_num)
 
         for (var res_counter = 0; res_counter < results_found.length; res_counter++){
             var clone_result_block = new_result_block.cloneNode(true);
             var clone_link = new_link.cloneNode(true);
             var clone_desc = new_desc.cloneNode(true);
-            clone_result_block.classList.add("result_block_long");
+            if (is_even){
+                clone_result_block.classList.add("result_block_long_alt");
+            }
+            else {
+                clone_result_block.classList.add("result_block_long");
+            }
+            is_even = !is_even;
             clone_link.setAttribute("href",results_found[res_counter][0]);
             clone_link.textContent = "Title: "+results_found[res_counter][0];
             clone_desc.textContent = "Page(s): "+results_found[res_counter][1]+" - "+results_found[res_counter][2];
@@ -370,6 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (var search_button_enum = 0; search_button_enum < all_search_buttons.length; search_button_enum++) {
         all_search_buttons[search_button_enum].addEventListener("click", search_archive);
     }
+    // ADD ENTER KEY ABILITY
 
     function make_database_connection(query){
         console.log("using run_search_funct")
