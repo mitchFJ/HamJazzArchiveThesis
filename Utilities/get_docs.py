@@ -17,12 +17,17 @@ def get_doc_path(doc_identifier):
     doc_path = 'Data/Transcripts/output/'
     ext = '.pdf'
 
+    print(f"File path created successfully.")
+
     return doc_path + doc_identifier + ext
 
 # Gets the list of labels
-def get_label_list(doc):
-    label_str = doc[2:len(doc) - 2]
+def get_label_list(labels_str):
+    label_str = labels_str[2:len(labels_str) - 2]
     labels_list = label_str.split('},{')
+
+    print(f"Labels turned into list successfully.")
+
     return labels_list
 
 # Gets the documents from the CSV
@@ -40,10 +45,12 @@ def get_docs_from_csv(csv_file_path):
 
             i += 1
 
+    print(f"Docs from '{csv_file_path}' obtained successfully.")
+
     return doc_list
 
 # CITE: https://pytutorial.com/how-to-merge-multiple-csv-files-in-python-complete-guide/
-def combine_csv():
+def combine_csvs():
     new_csv = 'Data/Jazz_Interviews_Doc_List.csv'
     csv_files = glob.glob('Data/Transcript_List/*.csv')
 
@@ -62,4 +69,36 @@ def combine_csv():
                 for row in reader:
                     writer.writerow(row)
 
+    print(f"Files '{csv_file_paths}' combined successfully.")
+
     return csv_files
+
+def scrape_labels(csv_path):
+    new_file_name = 'Data/scraped_labels.txt'
+    label_list = []
+
+    # CITE: https://www.geeksforgeeks.org/python/create-a-new-text-file-in-python/
+    with open(new_file_name, 'w') as file:
+        # CITE: https://docs.python.org/3/library/csv.html
+        with open(csv_path, newline='') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+
+            for row in csv_reader:
+                topicals = row['subject_topical']
+                topicals = topicals[2:len(topicals)-2]
+
+                topical_list = topicals.split('},{')
+
+                for label in topical_list:
+                    str_start = '"label":"'
+
+                    label = label[len(str_start):label.find('",')]
+                    # CITE: https://stackoverflow.com/questions/1549641/how-can-i-capitalize-the-first-letter-of-each-word-in-a-string
+                    label = ' '.join(word[0].upper() + word[1:] for word in label.split())
+
+                    if label not in label_list:
+                        label_list.append(label)
+
+            file.write("\n".join(label_list))
+
+    print(f"File '{new_file_name}' created successfully.")
