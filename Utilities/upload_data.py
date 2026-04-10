@@ -22,6 +22,7 @@ def save_text():
         all_pdf = []
         all_pages = []
         node_id = []
+        display_name = []
         page = 1
         if ("Audiovisual Materials" in pdf["type"]):
             page = 2
@@ -30,6 +31,7 @@ def save_text():
             all_text.append(text[i].strip())
             all_pdf.append(pdf["path"])
             node_id.append(pdf["id"])
+            display_name.append(pdf["name"])
             if ("\n" in text[i]):
                 all_pages.append((page, page+1))
                 page += 1
@@ -40,7 +42,8 @@ def save_text():
 
         grouped_text = {}
         for i in range(len(all_text)):
-            grouped_text[key + i] = [all_text[i], encoding[i].tolist(), str(all_pdf[i]), all_pages[i], node_id[i]]
+            grouped_text[key + i] = [all_text[i], encoding[i].tolist(), str(all_pdf[i]),
+                                     all_pages[i], node_id[i], display_name[i]]
         key += len(all_text)
 
         ref.update(grouped_text)
@@ -56,15 +59,6 @@ def exctract_text_from_pdf(path):
         full_text += page.extract_text()
         full_text += "\n"
     return full_text
-
-def temp_remove():
-    cred = credentials.Certificate("Data/fillius-jazz-archive-search-firebase-adminsdk-fbsvc-cda02f015f.json")
-    firebase_admin.initialize_app(cred, {'databaseURL': 'https://fillius-jazz-archive-search-default-rtdb.firebaseio.com'})
-    ref = db.reference('/')
-    data_to_remove = {}
-    for i in range(44479, 77861):
-        data_to_remove[i] = None
-    ref.update(data_to_remove)
 
 if __name__ == "__main__":
     #redact_all()

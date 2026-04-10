@@ -20,6 +20,7 @@ class jazzDataModule():
         sentences = db["text"]
         page_list = db["pagenum"]
         url_list = db["url"]
+        name_list = db["name"]
 
         encode_file = Path("Data/embeddings.npy")
         encode_list = np.load(encode_file)
@@ -31,12 +32,14 @@ class jazzDataModule():
         self.page_list = []
         self.url_list = []
         self.encode_list = []
+        self.name_list = []
         for pdf in valid_pdfs:
             for i in data[pdf["path"]]:
                 self.sentences.append(sentences[i])
                 self.page_list.append(page_list[i])
                 self.encode_list.append(encode_list[i])
                 self.url_list.append(URL_START + url_list[i])
+                self.name_list.append(name_list[i])
 
     def evaluate_query(self, query):
         query_encode = self.tokenize(query).astype(np.float64)
@@ -45,6 +48,7 @@ class jazzDataModule():
         self.best_pages = ["" for i in range(NUM_RETURN)]
         self.best_sentences = ["" for i in range(NUM_RETURN)]
         self.best_url = ["" for i in range(NUM_RETURN)]
+        self.best_display = ["" for i in range(NUM_RETURN)]
         
         for i in range(len(self.encode_list)):
             similar = util.cos_sim(query_encode, self.encode_list[i])
@@ -52,7 +56,7 @@ class jazzDataModule():
                 self.insert_response(i, similar)
         response = []
         for i in range(len(self.best_respones)):
-            this_response = [self.best_url[i], self.best_pages[i], self.best_sentences[i]]
+            this_response = [self.best_display[i], self.best_url[i], self.best_pages[i], self.best_sentences[i]]
             response.append(this_response)
         return response
 
@@ -67,6 +71,8 @@ class jazzDataModule():
                 self.best_sentences.pop()
                 self.best_url.insert(i, self.url_list[index])
                 self.best_url.pop()
+                self.best_display.insert(i, self.name_list[index])
+                self.best_display.pop()
                 return
 
     def tokenize(self, text):

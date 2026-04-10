@@ -6,6 +6,8 @@ from firebase_admin import db
 from pathlib import Path
 import json
 
+NUM_IN = 30000
+
 
 def download_data():
     cred = credentials.Certificate("Data/fillius-jazz-archive-search-firebase-adminsdk-fbsvc-cda02f015f.json")
@@ -17,31 +19,47 @@ def download_data():
     pdf_list = []
     page_list = []
     url_list = []
+    display_name = []
     last_key = 0
     num = 0
 
     while True:
+        docs = ref.order_by_key().start_at(str(last_key)).limit_to_first(NUM_IN)
         num += 1
-        docs = ref.order_by_key().start_at(str(last_key)).limit_to_first(30000)
         
         segment = docs.get()
-        if segment == None:
+        #print(len(segment))
+        #print(segment)
+        if not segment:
             break
+        
+        if last_key == 0 or last_key == 1:
+            for results in segment[last_key:]:
+                sentences.append(results[0])
+                encode_list.append(results[1].copy())
+                pdf_list.append(results[2])
+                page_list.append(results[3])
+                url_list.append(results[4])
+                display_name.append(results[5])
+        else:
+            for results in segment.values():
+                sentences.append(results[0])
+                encode_list.append(results[1].copy())
+                pdf_list.append(results[2])
+                page_list.append(results[3])
+                url_list.append(results[4])
+                display_name.append(results[5])
 
-        for i in range(last_key, len(segment)):
-            sentences.append(segment[i][0])
-            encode_list.append(segment[i][1].copy())
-            pdf_list.append(segment[i][2])
-            page_list.append(segment[i][3])
-            url_list.append(segment[i][4])
-
-        last_key += len(segment)
+        last_key += NUM_IN
         print(f"{50 * num}% done")
+        if (num == 2):
+            break
 
     data = {"text": sentences,
         "pdf": pdf_list,
         "pagenum": page_list,
-        "url": url_list
+        "url": url_list,
+        "name": display_name
     }
     csv_file = Path("Data/extracted_text.csv")
     df = pd.DataFrame(data)
