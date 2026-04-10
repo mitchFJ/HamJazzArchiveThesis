@@ -33,7 +33,6 @@ Data/Transcripts/output/yhm-jaz-bergeron-w-2020.pdf
 Data/Transcripts/output/yhm-jaz-bernhardt-w-2012.pdf
 Data/Transcripts/output/yhm-jaz-rendon-v-2020.pdf
 Data/Transcripts/output/yhm-jaz-pelote-v-2017.pdf
-Data/Transcripts/output/yhm-jaz-scott-t-2022b.pdf
 Data/Transcripts/output/yhm-jaz-rendon-v-2019.pdf
 Data/Transcripts/output/yhm-jaz-porrello-t-2023.pdf
 Data/Transcripts/output/yhm-jaz-scott-t-2022a.pdf
@@ -122,7 +121,7 @@ Data/Transcripts/output/yhm-jaz-diBlasio-d-2019.pdf
 Data/Transcripts/output/yhm-jaz-diBlasio-d-2020.pdf
 Data/Transcripts/output/yhm-jaz-torkanowsky-d-2019.pdf
 Data/Transcripts/output/yhm-jaz-finck-d-2015.pdf
-Data/Transcripts/output/yhm-jaz-d'imperio-d-2014.pdf
+Data/Transcripts/output/yhm-jaz-d_imperio-d-2014.pdf
 Data/Transcripts/output/yhm-jaz-morgenstern-d-2013.pdf
 Data/Transcripts/output/yhm-jaz-mancuso-c-2013.pdf
 Data/Transcripts/output/yhm-jaz-jenkins-c-2016.pdf
@@ -145,14 +144,14 @@ Data/Transcripts/output/yhm-jaz-miles-b-2020.pdf
 Data/Transcripts/output/yhm-jaz-shew-b-2020.pdf
 Data/Transcripts/output/yhm-jaz-kerr-c-2006.pdf
 Data/Transcripts/output/yhm-jaz-kilgore-r-1997.pdf
-Data/Transcripts/output/yhm-jaz-kellso-je-1997.pdf
+Data/Transcripts/output/yhm-jaz-kellso-j-1997.pdf
 Data/Transcripts/output/yhm-jaz-kay-s-2001.pdf
 Data/Transcripts/output/yhm-jaz-keepnews-o-2002.pdf
 Data/Transcripts/output/yhm-jaz-jordan-ke-2006.pdf
 Data/Transcripts/output/yhm-jaz-jordan-ki-2006.pdf
 Data/Transcripts/output/yhm-jaz-jerome-j-1996.pdf
 Data/Transcripts/output/yhm-jaz-johnson-b-1998.pdf
-Data/Transcripts/output/yhm-jaz-jacobs-p-2006.pdf
+Data/Transcripts/output/yhm-jaz-harris-j-2006.pdf
 Data/Transcripts/output/yhm-jaz-jarvis-j-1995.pdf
 Data/Transcripts/output/yhm-jaz-jackson-c-1998.pdf
 Data/Transcripts/output/yhm-jaz-jackson-d-1995.pdf
@@ -181,7 +180,7 @@ Data/Transcripts/output/yhm-jaz-fillius-m-2000.pdf
 Data/Transcripts/output/yhm-jaz-fleck-b-2004.pdf
 Data/Transcripts/output/yhm-jaz-ellis-h-1995.pdf
 Data/Transcripts/output/yhm-jaz-ellis-h-2000.pdf
-Data/Transcripts/output/yhm-jaz-edison-h-1995.pdf
+Data/Transcripts/output/yhm-jaz-edison-s-1995.pdf
 Data/Transcripts/output/yhm-jaz-defranco-b-1996.pdf
 Data/Transcripts/output/yhm-jaz-dodgion-j-1996.pdf
 Data/Transcripts/output/yhm-jaz-davis-c-1997.pdf

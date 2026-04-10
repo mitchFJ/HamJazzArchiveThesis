@@ -715,19 +715,6 @@
     ]
   },
   {
-    "id": "3d360379-1d89-48c5-83db-5c2fbf5d3391",
-    "name": "Tom Scott interviewed by Monk Rowe, via Zoom, April 1, 2022 [interview 2 of 2]",
-    "type": "[\"Audiovisual Materials\"]",
-    "path": "Data/Transcripts/output/yhm-jaz-scott-t-2022b.pdf",
-    "subject_topical": [
-      "\"label\":\"jazz\",\"uri\":\"\"",
-      "\"label\":\"recording studios\",\"uri\":\"\"",
-      "\"label\":\"film music\",\"uri\":\"\"",
-      "\"label\":\"saxophones\",\"uri\":\"\"",
-      "\"label\":\"jazz recordings\",\"uri\":\"\""
-    ]
-  },
-  {
     "id": "e9f1cb19-02ab-4ed1-98a5-cd5753ebdfd2",
     "name": "Victor Rendon interviewed by Monk Rowe, Clinton, New York, November 15, 2019 [interview 1 of 2]",
     "type": "[\"Audiovisual Materials\",\"Manuscripts\"]",
@@ -2210,7 +2197,7 @@
     "id": "eba043ec-4e79-444e-830c-b7d354f25cc9",
     "name": "Dan D'Imperio interviewed by Monk Rowe, Cortland, New York, June 30, 2014",
     "type": "[\"Audiovisual Materials\",\"Manuscripts\"]",
-    "path": "Data/Transcripts/output/yhm-jaz-d'imperio-d-2014.pdf",
+    "path": "Data/Transcripts/output/yhm-jaz-d_imperio-d-2014.pdf",
     "subject_topical": [
       "\"label\":\"jazz\",\"uri\":\"\"",
       "\"label\":\"drummers\",\"uri\":\"\"",
@@ -2597,7 +2584,7 @@
     "id": "c7f9813e-18a0-486c-9750-c743735cb691",
     "name": "Jon-Erik Kellso interviewed by Monk Rowe, Chautauqua, New York, September 12, 1997",
     "type": "[\"Audiovisual Materials\",\"Manuscripts\"]",
-    "path": "Data/Transcripts/output/yhm-jaz-kellso-je-1997.pdf",
+    "path": "Data/Transcripts/output/yhm-jaz-kellso-j-1997.pdf",
     "subject_topical": [
       "\"label\":\"jazz\",\"uri\":\"\"",
       "\"label\":\"trumpets\",\"uri\":\"\"",
@@ -2692,7 +2679,7 @@
     "id": "3f37ae19-8996-45a0-9ed3-b64b69e6603c",
     "name": "Phoebe Jacobs and Jackie Harris interviewed by Monk Rowe, Rome, New York, August 21, 2006",
     "type": "[\"Audiovisual Materials\",\"Manuscripts\"]",
-    "path": "Data/Transcripts/output/yhm-jaz-jacobs-p-2006.pdf",
+    "path": "Data/Transcripts/output/yhm-jaz-harris-j-2006.pdf",
     "subject_topical": [
       "\"label\":\"jazz\",\"uri\":\"\"",
       "\"label\":\"jazz education\",\"uri\":\"\"",
@@ -3279,7 +3266,7 @@
     "id": "e92418c9-7b49-4f87-9c6c-704462b42673",
     "name": "Harry \"Sweets\" Edison interviewed by Monk Rowe, Los Angeles, California, September 3, 1995",
     "type": "[\"Audiovisual Materials\",\"Manuscripts\"]",
-    "path": "Data/Transcripts/output/yhm-jaz-edison-h-1995.pdf",
+    "path": "Data/Transcripts/output/yhm-jaz-edison-s-1995.pdf",
     "subject_topical": [
       "\"label\":\"jazz\",\"uri\":\"\"",
       "\"label\":\"trumpets\",\"uri\":\"\"",
@@ -4003,7 +3990,7 @@
     "id": "f2a61940-0af9-4860-a886-432c27304749",
     "name": "Manny Albam interviewed by Monk Rowe, Tarrytown, New York, October 31, 1998",
     "type": "[\"Audiovisual Materials\",\"Manuscripts\"]",
-    "path": "Data/Transcripts/output/yhm-jaz-albam-m-1998.pdf",
+    "path": "Data/Transcripts/output/yhm-jaz-albam-m-1995.pdf",
     "subject_topical": [
       "\"label\":\"Conductors Guild\",\"uri\":\"http://id.loc.gov/authorities/names/no2024095919\"",
       "\"label\":\"jazz\",\"uri\":\"\"",
@@ -4036,7 +4023,7 @@
     "id": "aad45fcc-3ffb-4607-9168-43433dfb6a72",
     "name": "Nat Adderley interviewed by Monk Rowe and Michael Woods, Majesty of the Seas, May 29, 1995",
     "type": "[\"Audiovisual Materials\",\"Manuscripts\"]",
-    "path": "Data/Transcripts/output/yhm-jaz-adderly-n-1995.pdf",
+    "path": "Data/Transcripts/output/yhm-jaz-adderley-n-1995.pdf",
     "subject_topical": [
       "\"label\":\"jazz\",\"uri\":\"\"",
       "\"label\":\"trumpets\",\"uri\":\"\"",

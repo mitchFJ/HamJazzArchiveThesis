@@ -350,32 +350,33 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (curr_checkbox_exc && curr_checkbox_exc.checked) {
                 exc_list.push(tag_list_master[check_count]);
-                console.log(tag_list_master[check_count])
+                console.log(tag_list_master[check_count]);
             }
         }
-        console.log("inc_list len"+inc_list.length)
-        return inc_list, exc_list;
+        console.log("inc_list len"+inc_list.length);
+        return {inc_list, exc_list};
     }
 
     function search_archive() {
         console.log("Clicked");
         var query = document.getElementById("searchBar").value;
-        var inc_list;
-        var exc_list;
-        inc_list, exc_list = get_active_filters();
+        var {inc_list: inc_list_master, exc_list: exc_list_master} = get_active_filters();
         console.log(query);
-        if (inc_list){
-            for (var x = 0; x < inc_list.length; x++){
-                console.log(inc_list[x]);
+        console.log(inc_list_master)
+        if (inc_list_master){
+            // console.log("inc_list_master in search_archive()")
+            for (var x = 0; x < inc_list_master.length; x++){
+                console.log("   "+inc_list_master[x]);
             }
         }
-        if (exc_list) {
-            for (var x = 0; x < exc_list.length; x++){
-                console.log(exc_list[x]);
+        if (exc_list_master) {
+            // console.log("inc_list_master in search_archive()")
+            for (var x = 0; x < exc_list_master.length; x++){
+                console.log("   "+exc_list_master[x]);
             }
         }
         console.log("About to connect...")
-        make_database_connection(query)
+        make_database_connection(query, inc_list_master, exc_list_master)
     }
 
     var all_search_buttons = document.getElementsByClassName("search_go");
@@ -384,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // ADD ENTER KEY ABILITY
 
-    function make_database_connection(query){
+    function make_database_connection(query, inc_list, exc_list){
         console.log("using run_search_funct")
         fetch("http://127.0.0.1:5000/run_search_funct", {
             method: 'POST',
@@ -394,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE',
                 'Access-Control-Allow-Headers': 'Content-Type'
             },
-            body: JSON.stringify({ message: query })
+            body: JSON.stringify({ message: query, inc_list_json_ver: inc_list, exc_list_json_ver: exc_list})
         })
         .then(response => response.json())
         .then(string => {

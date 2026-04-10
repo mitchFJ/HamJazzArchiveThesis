@@ -73,7 +73,7 @@ class jazzDataModule():
 # Search funct class activation
 def search_only_query(query):
     test = jazzDataModule()
-    print("Beginning search...")
+    print("Beginning query-only search...")
     results_of_search = test.evaluate_query(query)
     return results_of_search
 
@@ -117,19 +117,21 @@ def check_list(doc_list, new_doc_list, label_list, is_included):
 
 def get_list_of_labels():
     label_list = []
-    with open(file_name, newline='') as csv_file:
-        csv_reader = csv.DictReader(csv_file)
-        for row in csv_reader:
-            include_docs.append(dict(label = row[doc_name], subject_topical = row[labels_name]))
-            print(row[labels_name])
-            labels_here = json.loads(row[labels_name])
-            for index in range(len(labels_here)):
-                print(f"INDEXth: {labels_here[index]}")
-                print(f"       : {labels_here[index]['label']}")
-                if labels_here[index]['label'] not in label_list:
-                    label_list.append(labels_here[index]['label'])
-                else:
-                    print("         -Already included.-")
+    with open('../Data/scraped_labels.txt', 'r') as file:
+        label_list = file.read().splitlines()
+    # with open(file_name, newline='') as csv_file:
+    #     csv_reader = csv.DictReader(csv_file)
+    #     for row in csv_reader:
+    #         include_docs.append(dict(label = row[doc_name], subject_topical = row[labels_name]))
+    #         print(row[labels_name])
+    #         labels_here = json.loads(row[labels_name])
+    #         for index in range(len(labels_here)):
+    #             print(f"INDEXth: {labels_here[index]}")
+    #             print(f"       : {labels_here[index]['label']}")
+    #             if labels_here[index]['label'] not in label_list:
+    #                 label_list.append(labels_here[index]['label'])
+    #             else:
+    #                 print("         -Already included.-")
     for label in label_list:
         print(label, end=', ')
     print()
@@ -143,10 +145,24 @@ def run_search_funct():
     if request.method == 'POST':
         # Process data sent from JavaScript
         data = request.json.get("message")
+        inc_list_q = request.json.get("inc_list_json_ver")
+        exc_list_q = request.json.get("exc_list_json_ver")
+        if inc_list_q:
+            print("Successfully passed includes...")
+            for x in inc_list_q:
+                print("   "+x)
+        else:
+            print("No include tags passed.")
+        if exc_list_q:
+            print("Successfully passed excludes...")
+            for x in exc_list_q:
+                print("   "+x)
+        else:
+            print("No exclude tags passed.")
         if data is None:
             return jsonify({"error": "Invalid JSON"}), 400
         else:
-            print(data)
+            print("Search query: "+data)
             results = search_only_query(data)
             print("Done searching.")
             if len(results)>0:
