@@ -31,6 +31,8 @@
 
 .filter_box {
   width: 20%;
+  /*position: sticky;
+  top: 10px;*/
   border: 5px solid #000;
   float: right;
   padding: 1%;
@@ -96,8 +98,9 @@
 
 .head_container {
   display: flex;
-  /*border: 3px solid #9cdf01;*/
-  background-color: #000a42
+  /*border: 3px solid #9cdf01;
+  background-color: #000a42;*/
+  background: linear-gradient(to right, #001691, #000311);
 }
 
 .logo_obj {
@@ -107,12 +110,31 @@
 
 .rights_and_info {
   margin-left: 1%;
-  margin-right: 1%
+  margin-right: 1%;
+  font-size: 20px
+}
+
+.rights_and_info_bottom {
+  padding-left: 1%;
+  padding-right: 1%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  margin-top: 1%;
+  font-size: 20px;
+  background-color: #001277;
+  color:#ffffff
 }
 
 .rights_and_info_bodies {
   margin-left: 3%;
-  margin-right: 3%
+  margin-right: 3%;
+  font-size: 15px
+}
+
+.main_body_cont {
+  border: 2px solid #b40000;
+  display: flex;
+  justify-content: left
 }
 
 h1 {

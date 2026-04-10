@@ -73,7 +73,7 @@ class jazzDataModule():
 # Search funct class activation
 def search_only_query(query):
     test = jazzDataModule()
-    print("Beginning search...")
+    print("Beginning query-only search...")
     results_of_search = test.evaluate_query(query)
     return results_of_search
 
