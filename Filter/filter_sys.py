@@ -45,8 +45,10 @@ def filter_docs(doc_list, include_list = ['jazz'], exclude_list = ['composers'])
     # Check if documents have exclude filters
     if len(exclude_list) >= 1:
         check_exclude(new_doc_list, exclude_list, label_dict)
+
+    create_txt(new_doc_list)
     
-    return new_doc_list
+    return
 
 def create_txt(doc_list):
     new_file_name = 'Data/doc_list.txt'
@@ -55,7 +57,3 @@ def create_txt(doc_list):
         file.write("\n".join(doc_list))
     
     return
-
-doc_list = get_doc_list('Data/doc_list.json')
-filtered_docs = filter_docs(doc_list)
-create_txt(filtered_docs)
