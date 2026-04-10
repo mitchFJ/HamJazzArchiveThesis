@@ -16,6 +16,7 @@ def download_data():
     encode_list = []
     pdf_list = []
     page_list = []
+    url_list = []
     last_key = 0
     num = 0
 
@@ -32,13 +33,15 @@ def download_data():
             encode_list.append(segment[i][1].copy())
             pdf_list.append(segment[i][2])
             page_list.append(segment[i][3])
+            url_list.append(segment[i][4])
 
         last_key += len(segment)
         print(f"{50 * num}% done")
 
     data = {"text": sentences,
         "pdf": pdf_list,
-        "pagenum": page_list
+        "pagenum": page_list,
+        "url": url_list
     }
     csv_file = Path("Data/extracted_text.csv")
     df = pd.DataFrame(data)
