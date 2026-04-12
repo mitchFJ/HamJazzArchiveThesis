@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var displayed_tags_inc = 0;
     var displayed_tags_exc = 0;
     var max_displayed_tags = 10;
+    var max_results_displayed = 5;
+    var curr_first_result = 0;
+    var page_buttons_loaded = false;
     console.log("Hello World");
     console.log(coll.length);
     for (collapsi = 0; collapsi < coll.length; collapsi++) {
@@ -302,6 +305,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function wipe_and_display_new_res(results_found, page_number){
+        var res_container = document.getElementById("results_container");
+        res_container.replaceChildren();
+        var new_result_block = document.createElement('div');
+        var new_link = document.createElement('a');
+        var new_desc = document.createElement('p');
+        var is_even = false;
+        curr_first_result = page_number*(max_results_displayed)
+    }
+
     // Search
     function set_up_results(results_found) {
         var res_container = document.getElementById("results_container");
@@ -311,9 +324,12 @@ document.addEventListener('DOMContentLoaded', function() {
         var new_desc = document.createElement('p');
         var is_even = false;
 
+        var unga = 13;
+        var curr_last_result = (curr_first_result+max_results_displayed)
+
         var show_res_num = document.createElement('p');
         show_res_num.setAttribute("id","show_res_num");
-        show_res_num.textContent = results_found.length + " results found. Displaying 5 out of " + results_found.length + ".";
+        show_res_num.textContent = results_found.length + " results found. Displaying "+(curr_first_result+1)+" - " + (curr_last_result) + ".";
         res_container.append(show_res_num)
 
         for (var res_counter = 0; res_counter < results_found.length; res_counter++){
@@ -327,12 +343,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 clone_result_block.classList.add("result_block_long");
             }
             is_even = !is_even;
-            clone_link.setAttribute("href",results_found[res_counter][0]);
-            clone_link.textContent = "Title: "+results_found[res_counter][0];
-            clone_desc.textContent = "Page(s): "+results_found[res_counter][1]+" - "+results_found[res_counter][2];
+            clone_link.setAttribute("href",results_found[res_counter][1]);
+            clone_link.textContent = results_found[res_counter][0];
+            clone_desc.textContent = "Page(s): "+results_found[res_counter][2]+" - "+results_found[res_counter][3];
             res_container.append(clone_result_block);
             clone_result_block.append(clone_link);
             clone_result_block.append(clone_desc);
+        }
+        if (!page_buttons_loaded && results_found.length>max_results_displayed){
+            //ADD DIVS FOR BUTTONS in parent div
+            page_buttons_loaded = true;
         }
     }
 
