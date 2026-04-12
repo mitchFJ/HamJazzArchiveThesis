@@ -31,8 +31,16 @@ def check_exclude(new_doc_list, label_list, label_dict):
 
     return
 
+# def get_paths(doc_list):
+#     new_doc_list = []
+
+#     for doc in doc_list:
+#         new_doc_list.append(doc['path'])
+
+#     return new_doc_list
+
 # Checks to see if there are any filters active in the documents
-def filter_docs(doc_list, include_list = [], exclude_list = []): # Are the lists files or lists?
+def filter_docs(doc_list, include_list = [], exclude_list = ['jazz']): # Are the lists files or lists?
     new_doc_list = []
     label_dict = fll.link_label_to_docs(doc_list)
 
@@ -43,7 +51,7 @@ def filter_docs(doc_list, include_list = [], exclude_list = []): # Are the lists
         check_include(new_doc_list, include_list, label_dict)
     
     # Check if documents have exclude filters
-    if len(exclude_list) > 0:
+    if len(exclude_list) >= 1:
         check_exclude(new_doc_list, exclude_list, label_dict)
     
     return new_doc_list
@@ -55,3 +63,5 @@ def create_txt(doc_list):
         file.write("\n".join(doc_list))
     
     return
+
+print(filter_docs(get_doc_list('Data/doc_list.json')))
