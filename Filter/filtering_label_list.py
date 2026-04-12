@@ -1,5 +1,4 @@
 label_list_file_path = 'Data/scraped_labels.txt'
-csv_path = 'Data/Jazz_Interviews_Doc_List.csv'
 
 def set_doc_to_labels(doc, label_dict):
     for label in doc['subject_topical']:
@@ -8,7 +7,7 @@ def set_doc_to_labels(doc, label_dict):
             new_doc_list = [doc['path']]
         else:
             new_doc_list = label_dict[key]
-            new_doc_list.append(doc['path'])
+            new_doc_list.append(doc)
         label_dict.update({key: new_doc_list})
     return
 
@@ -30,3 +29,4 @@ def link_label_to_docs(doc_list, label_dict = create_label_dict()):
     for doc in doc_list:
         set_doc_to_labels(doc, label_dict)
     return label_dict
+

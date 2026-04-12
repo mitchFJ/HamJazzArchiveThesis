@@ -31,14 +31,6 @@ def check_exclude(new_doc_list, label_list, label_dict):
 
     return
 
-def get_paths(doc_list):
-    new_doc_list = []
-
-    for doc in doc_list:
-        new_doc_list.append(doc['path'])
-
-    return new_doc_list
-
 # Checks to see if there are any filters active in the documents
 def filter_docs(doc_list, include_list = [], exclude_list = []): # Are the lists files or lists?
     new_doc_list = []
@@ -46,18 +38,18 @@ def filter_docs(doc_list, include_list = [], exclude_list = []): # Are the lists
 
     # Checks if both filter lists have no elements
     if len(include_list) < 1:
-        new_doc_list = get_paths(doc_list)
+        new_doc_list = doc_list
     else:
         check_include(new_doc_list, include_list, label_dict)
     
     # Check if documents have exclude filters
-    if len(exclude_list) >= 1:
+    if len(exclude_list) > 0:
         check_exclude(new_doc_list, exclude_list, label_dict)
     
     return new_doc_list
 
 def create_txt(doc_list):
-    new_file_name = 'Data/doc_list.txt'
+    new_file_name = 'Data/filtered_doc_list.json'
 
     with open(new_file_name, 'w') as file:
         file.write("\n".join(doc_list))
