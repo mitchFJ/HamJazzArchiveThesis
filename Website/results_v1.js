@@ -403,6 +403,13 @@ document.addEventListener('DOMContentLoaded', function() {
     for (var search_button_enum = 0; search_button_enum < all_search_buttons.length; search_button_enum++) {
         all_search_buttons[search_button_enum].addEventListener("click", search_archive);
     }
+    document.getElementById("searchBar").addEventListener('keydown', function(event){
+        console.log("Almost there");
+        if (event.key == 'Enter'){
+            console.log('WORKING HOORAY YIPPEE');
+            search_archive();
+        }
+    })
     // ADD ENTER KEY ABILITY
 
     function make_database_connection(query, inc_list, exc_list){
