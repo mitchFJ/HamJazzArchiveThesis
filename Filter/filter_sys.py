@@ -31,17 +31,10 @@ def check_exclude(new_doc_list, label_list, label_dict):
 
     return
 
-# def get_paths(doc_list):
-#     new_doc_list = []
-
-#     for doc in doc_list:
-#         new_doc_list.append(doc['path'])
-
-#     return new_doc_list
-
 # Checks to see if there are any filters active in the documents
-def filter_docs(doc_list, include_list = [], exclude_list = ['jazz']): # Are the lists files or lists?
+def filter_docs(include_list = [], exclude_list = ['jazz']): # Are the lists files or lists?
     new_doc_list = []
+    doc_list = get_doc_list('Data/doc_list.json')
     label_dict = fll.link_label_to_docs(doc_list)
 
     # Checks if both filter lists have no elements
