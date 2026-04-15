@@ -112,12 +112,13 @@ def create_txt(doc_list):
 # Search funct class - BEGIN
 NUM_RETURN = 5
 URL_START = "https://litsdigital.hamilton.edu/do/"
+PAGE_SELECT = "#page/"
 
 class jazzDataModule():
     def __init__(self, include_list = [], exclude_list = []):
-        self.get_filtered(include_list, exclude_list)
-
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
+
+        self.get_filtered(include_list, exclude_list)
 
     def get_filtered(self, include_list = [], exclude_list = []):
         csv_file = Path("../Data/extracted_text.csv")
@@ -145,7 +146,7 @@ class jazzDataModule():
                 self.sentences.append(sentences[i])
                 self.page_list.append(page_list[i])
                 self.encode_list.append(encode_list[i])
-                self.url_list.append(URL_START + url_list[i])
+                self.url_list.append(URL_START + url_list[i] + PAGE_SELECT)
                 self.name_list.append(name_list[i])
 
     def evaluate_query(self, query):
@@ -163,7 +164,10 @@ class jazzDataModule():
                 self.insert_response(i, similar)
         response = []
         for i in range(len(self.best_respones)):
-            this_response = [self.best_display[i], self.best_url[i], self.best_pages[i], self.best_sentences[i]]
+            if (self.best_pages[i][0] == "["):
+                this_response = [self.best_display[i], self.best_url[i] + self.best_pages[i][1:self.best_pages[i].find(",")], self.best_pages[i], self.best_sentences[i]]
+            else:
+                this_response = [self.best_display[i], self.best_url[i] + self.best_pages[i], self.best_pages[i], self.best_sentences[i]]
             response.append(this_response)
         return response
 

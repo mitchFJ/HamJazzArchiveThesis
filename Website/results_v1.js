@@ -415,7 +415,6 @@ document.addEventListener('DOMContentLoaded', function() {
             search_archive();
         }
     })
-    // ADD ENTER KEY ABILITY
 
     function make_database_connection(query, inc_list, exc_list){
         console.log("using run_search_funct")
