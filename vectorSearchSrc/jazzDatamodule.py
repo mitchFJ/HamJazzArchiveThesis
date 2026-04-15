@@ -57,7 +57,6 @@ class jazzDataModule():
                 self.insert_response(i, similar)
         response = []
         for i in range(len(self.best_respones)):
-            print(f"{self.best_pages[i]}, {type(self.best_pages[i])}")
             if (self.best_pages[i][0] == "["):
                 this_response = [self.best_display[i], self.best_url[i] + self.best_pages[i][1:self.best_pages[i].find(",")], self.best_pages[i], self.best_sentences[i]]
             else:
