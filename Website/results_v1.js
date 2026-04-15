@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
     var displayed_tags_inc = 0;
     var displayed_tags_exc = 0;
     var max_displayed_tags = 10;
-    var max_results_displayed = 5;
+
+    var max_results_displayed = 10;
     var curr_first_result = 0;
     var page_buttons_loaded = false;
+    var MAX_RESULTS = 10;
+
     console.log("Hello World");
     console.log(coll.length);
     for (collapsi = 0; collapsi < coll.length; collapsi++) {
@@ -332,6 +335,8 @@ document.addEventListener('DOMContentLoaded', function() {
         show_res_num.textContent = results_found.length + " results found. Displaying "+(curr_first_result+1)+" - " + (curr_last_result) + ".";
         res_container.append(show_res_num)
 
+        // res_counter<max_res_displ
+        // WITHIN: res_counter+curr_first_res
         for (var res_counter = 0; res_counter < results_found.length; res_counter++){
             var clone_result_block = new_result_block.cloneNode(true);
             var clone_link = new_link.cloneNode(true);
@@ -422,7 +427,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE',
                 'Access-Control-Allow-Headers': 'Content-Type'
             },
-            body: JSON.stringify({ message: query, inc_list_json_ver: inc_list, exc_list_json_ver: exc_list})
+            body: JSON.stringify({ message: query, inc_list_json_ver: inc_list, exc_list_json_ver: exc_list, glob_num_ret: MAX_RESULTS})
         })
         .then(response => response.json())
         .then(string => {

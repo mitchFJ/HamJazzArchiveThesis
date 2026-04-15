@@ -257,6 +257,8 @@ def run_search_funct():
         data = request.json.get("message")
         inc_list_q = request.json.get("inc_list_json_ver")
         exc_list_q = request.json.get("exc_list_json_ver")
+        global NUM_RETURN
+        NUM_RETURN = request.json.get("glob_num_ret")
         if inc_list_q:
             print("Successfully passed includes...")
             for x in inc_list_q:
