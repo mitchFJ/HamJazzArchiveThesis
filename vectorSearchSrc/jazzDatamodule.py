@@ -5,7 +5,7 @@ from pathlib import Path
 import json
 import filter_sys
 
-NUM_RETURN = 5
+NUM_RETURN = 2
 URL_START = "https://litsdigital.hamilton.edu/do/"
 PAGE_SELECT = "#page/"
 
@@ -57,8 +57,9 @@ class jazzDataModule():
                 self.insert_response(i, similar)
         response = []
         for i in range(len(self.best_respones)):
-            if type(self.best_pages[i]) is list:
-                this_response = [self.best_display[i], self.best_url[i] + self.best_pages[i][0], self.best_pages[i], self.best_sentences[i]]
+            print(f"{self.best_pages[i]}, {type(self.best_pages[i])}")
+            if (self.best_pages[i][0] == "["):
+                this_response = [self.best_display[i], self.best_url[i] + self.best_pages[i][1:self.best_pages[i].find(",")], self.best_pages[i], self.best_sentences[i]]
             else:
                 this_response = [self.best_display[i], self.best_url[i] + self.best_pages[i], self.best_pages[i], self.best_sentences[i]]
             response.append(this_response)
