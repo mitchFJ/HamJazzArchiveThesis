@@ -4,7 +4,7 @@ This project is a website that searches for quotes within transcripts conducted 
 Use:
 run "pip install -r Utilities/requirements.txt" to get correct packages
 unzip API key and enter correct password
-run "python3 download_data.py" to get all data (this will take a few minutes, but only needs to be done once)
+run "python3 Utilities/download_data.py" to get all data (this will take a few minutes, but only needs to be done once)
 
 IF RUNNING LOCALLY:
 Open two terminals/command lines, both within the Website directory.
