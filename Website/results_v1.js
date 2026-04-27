@@ -349,6 +349,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             is_even = !is_even;
             clone_link.setAttribute("href",results_found[res_counter][1]);
+            // target="_blank" rel="noopener noreferrer"
+            clone_link.setAttribute("target","_blank");
+            clone_link.setAttribute("rel","noopener noreferrer");
             clone_link.textContent = results_found[res_counter][0];
             clone_desc.textContent = "Page(s): "+results_found[res_counter][2]+" - "+results_found[res_counter][3];
             res_container.append(clone_result_block);
