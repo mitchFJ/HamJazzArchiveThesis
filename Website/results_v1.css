@@ -42,7 +42,7 @@
 
 .page_butt_holder {
   /* float: left; */
-  border: 1px solid #df7b01;
+  /* border: 1px solid #df7b01; */
   display: flex;
   justify-content: center;
   width: 100%
@@ -152,7 +152,7 @@ a:hover {
 }
 
 .main_body_cont {
-  border: 2px solid #b40000;
+  /* border: 2px solid #b40000; */
   display: flex;
   justify-content: center
 }

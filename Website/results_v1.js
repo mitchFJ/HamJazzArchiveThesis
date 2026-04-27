@@ -371,11 +371,20 @@ document.addEventListener('DOMContentLoaded', function() {
             var base_page_butt = document.createElement("button");
             base_page_butt.classList.add("page_button");
 
+            var clone_prev_butt = base_page_butt.cloneNode(true);
+            clone_prev_butt.textContent = "<- Prev"
+            clone_prev_butt.addEventListener("click", function(event){
+                if (((curr_first_result/max_results_displayed)-1)*max_results_displayed >= 0)
+                    curr_first_result = ((curr_first_result/max_results_displayed)-1)*max_results_displayed;
+                console.log("NOW: "+ curr_first_result);
+                set_up_results(FULL_RESULTS);
+            });
+            pb_div.appendChild(clone_prev_butt);
+
             console.log(Math.ceil(results_found.length/max_results_displayed));
             for (var page_num = 1; page_num <= Math.ceil(results_found.length/max_results_displayed); page_num++){
                 console.log(" HI "+page_num)
                 var clone_page_butt = base_page_butt.cloneNode(true);
-                // clone_page_butt.setAttribute("id","page_butt_"+page_num)
                 clone_page_butt.textContent = page_num;
                 clone_page_butt.addEventListener("click", function(event){
                     curr_first_result = (event.target.textContent-1)*max_results_displayed;
@@ -384,6 +393,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 pb_div.appendChild(clone_page_butt);
             }
+
+            var clone_next_butt = base_page_butt.cloneNode(true);
+            clone_next_butt.textContent = "Next ->"
+            clone_next_butt.addEventListener("click", function(event){
+                if (((curr_first_result/max_results_displayed)+1)*max_results_displayed < results_found.length)
+                    curr_first_result = ((curr_first_result/max_results_displayed)+1)*max_results_displayed;
+                console.log("NOW: "+ curr_first_result);
+                set_up_results(FULL_RESULTS);
+            });
+            pb_div.appendChild(clone_next_butt);
+
             page_buttons_loaded = true;
         }
     }
