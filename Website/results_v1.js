@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var displayed_tags_exc = 0;
     var max_displayed_tags = 10;
 
-    var max_results_displayed = 10;
+    var FULL_RESULTS = []
+    var max_results_displayed = 5;
     var curr_first_result = 0;
     var page_buttons_loaded = false;
     var MAX_RESULTS = 10;
@@ -29,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var tag_list_master = [];
     const inc_place = document.getElementById('include_div');
     const exc_place = document.getElementById('exclude_div');
+
+    // document.getElementById("searchBar").style.outline = "2px solid blue";
 
     function create_all_tags(tag_list){
         // ADDING ALL TAGS
@@ -327,7 +330,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var new_desc = document.createElement('p');
         var is_even = false;
 
-        var unga = 13;
         var curr_last_result = (curr_first_result+max_results_displayed)
 
         var show_res_num = document.createElement('p');
@@ -337,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // res_counter<max_res_displ
         // WITHIN: res_counter+curr_first_res
-        for (var res_counter = 0; res_counter < results_found.length; res_counter++){
+        for (var res_counter = 0; res_counter < max_results_displayed; res_counter++){
             var clone_result_block = new_result_block.cloneNode(true);
             var clone_link = new_link.cloneNode(true);
             var clone_desc = new_desc.cloneNode(true);
@@ -348,18 +350,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 clone_result_block.classList.add("result_block_long");
             }
             is_even = !is_even;
-            clone_link.setAttribute("href",results_found[res_counter][1]);
-            // target="_blank" rel="noopener noreferrer"
+            clone_link.setAttribute("href",results_found[res_counter + curr_first_result][1]);
             clone_link.setAttribute("target","_blank");
             clone_link.setAttribute("rel","noopener noreferrer");
-            clone_link.textContent = results_found[res_counter][0];
-            clone_desc.textContent = "Page(s): "+results_found[res_counter][2]+" - "+results_found[res_counter][3];
+            clone_link.textContent = results_found[res_counter + curr_first_result][0];
+            clone_desc.textContent = "Page(s): "+results_found[res_counter + curr_first_result][2]+" - "+results_found[res_counter + curr_first_result][3];
             res_container.append(clone_result_block);
             clone_result_block.append(clone_link);
             clone_result_block.append(clone_desc);
         }
+
         if (!page_buttons_loaded && results_found.length>max_results_displayed){
             //ADD DIVS FOR BUTTONS in parent div
+            const pb_div = document.createElement('div')
+            pb_div.classList.add("page_butt_holder")
+            document.body.insertBefore(pb_div, document.body.children[document.body.children.length-1])
+
+            var base_page_butt = document.createElement("button");
+            base_page_butt.classList.add("page_button");
+
+            console.log(Math.ceil(results_found.length/max_results_displayed));
+            for (var page_num = 1; page_num <= Math.ceil(results_found.length/max_results_displayed); page_num++){
+                console.log(" HI "+page_num)
+                var clone_page_butt = base_page_butt.cloneNode(true);
+                // clone_page_butt.setAttribute("id","page_butt_"+page_num)
+                clone_page_butt.textContent = page_num;
+                pb_div.appendChild(clone_page_butt);
+            }
             page_buttons_loaded = true;
         }
     }
@@ -387,6 +404,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function search_archive() {
         console.log("Clicked");
+        var res_container = document.getElementById("results_container");
+        var loading_results = document.createElement('p');
+        loading_results.textContent = "Loading...";
+        res_container.append(loading_results)
+
         var query = document.getElementById("searchBar").value;
         var {inc_list: inc_list_master, exc_list: exc_list_master} = get_active_filters();
         console.log(query);
@@ -412,9 +434,10 @@ document.addEventListener('DOMContentLoaded', function() {
         all_search_buttons[search_button_enum].addEventListener("click", search_archive);
     }
     document.getElementById("searchBar").addEventListener('keydown', function(event){
-        console.log("Almost there");
+        // console.log("Almost there");
         if (event.key == 'Enter'){
-            console.log('WORKING HOORAY YIPPEE');
+            // console.log('WORKING HOORAY YIPPEE');
+            this.blur();
             search_archive();
         }
     })
@@ -440,6 +463,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(string.answer[0]);
             // Printing our field of our response
             console.log(`Title of our response :  ${string.title}`);
+            FULL_RESULTS = string.answer;
             set_up_results(string.answer);
         })
         .catch(errorMsg => { console.log(errorMsg); });
