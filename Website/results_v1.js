@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var max_displayed_tags = 10;
 
     var FULL_RESULTS = []
-    var max_results_displayed = 5;
+    var max_results_displayed = 4;
     var curr_first_result = 0;
     var page_buttons_loaded = false;
     var MAX_RESULTS = 10;
@@ -331,6 +331,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var is_even = false;
 
         var curr_last_result = (curr_first_result+max_results_displayed)
+        if (curr_last_result > results_found.length){
+            curr_last_result = results_found.length;
+        }
 
         var show_res_num = document.createElement('p');
         show_res_num.setAttribute("id","show_res_num");
@@ -339,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // res_counter<max_res_displ
         // WITHIN: res_counter+curr_first_res
-        for (var res_counter = 0; res_counter < max_results_displayed; res_counter++){
+        for (var res_counter = 0; res_counter < max_results_displayed && res_counter+curr_first_result<curr_last_result; res_counter++){
             var clone_result_block = new_result_block.cloneNode(true);
             var clone_link = new_link.cloneNode(true);
             var clone_desc = new_desc.cloneNode(true);
@@ -361,7 +364,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (!page_buttons_loaded && results_found.length>max_results_displayed){
-            //ADD DIVS FOR BUTTONS in parent div
             const pb_div = document.createElement('div')
             pb_div.classList.add("page_butt_holder")
             document.body.insertBefore(pb_div, document.body.children[document.body.children.length-1])
@@ -375,6 +377,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 var clone_page_butt = base_page_butt.cloneNode(true);
                 // clone_page_butt.setAttribute("id","page_butt_"+page_num)
                 clone_page_butt.textContent = page_num;
+                clone_page_butt.addEventListener("click", function(event){
+                    curr_first_result = (event.target.textContent-1)*max_results_displayed;
+                    console.log("NOW: "+ curr_first_result);
+                    set_up_results(FULL_RESULTS);
+                });
                 pb_div.appendChild(clone_page_butt);
             }
             page_buttons_loaded = true;
@@ -441,6 +448,15 @@ document.addEventListener('DOMContentLoaded', function() {
             search_archive();
         }
     })
+
+    // var all_page_buttons = document.getElementsByClassName("page_button");
+    // for (let page_button_indiv in all_page_buttons) {
+    //     page_button_indiv.addEventListener("click", function(event){
+    //         curr_first_result = event.target.textContent;
+    //         console.log("NOW: "+ curr_first_result);
+    //         // set_up_results(FULL_RESULTS);
+    //     });
+    // }
 
     function make_database_connection(query, inc_list, exc_list){
         console.log("using run_search_funct")

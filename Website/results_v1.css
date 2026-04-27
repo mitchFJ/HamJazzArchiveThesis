@@ -43,6 +43,8 @@
 .page_butt_holder {
   /* float: left; */
   border: 1px solid #df7b01;
+  display: flex;
+  justify-content: center;
   width: 100%
 }
 
