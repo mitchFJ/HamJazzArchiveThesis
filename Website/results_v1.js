@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var max_displayed_tags = 10;
 
     var FULL_RESULTS = []
-    var max_results_displayed = 4;
+    var max_results_displayed = 10;
     var curr_first_result = 0;
     var page_buttons_loaded = false;
-    var MAX_RESULTS = 10;
+    var MAX_RESULTS = 57;
 
     console.log("Hello World");
     console.log(coll.length);
@@ -31,7 +31,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const inc_place = document.getElementById('include_div');
     const exc_place = document.getElementById('exclude_div');
 
-    // document.getElementById("searchBar").style.outline = "2px solid blue";
+    // Disables 'Exclude' tag filter
+    coll[1].classList.add("hidden");
+
+    var isTabbing = false;
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+            isTabbing = true;
+        }
+    });
+    window.addEventListener('mousedown', () => {
+        isTabbing = false;
+    });
+    window.addEventListener('focusin', () => {
+        if (isTabbing) {
+            console.log('Focused by Tab:', document.activeElement);
+        }
+    });
+
+
+    document.addEventListener("keydown", function(e) {
+        if (isTabbing && e.key === "Enter" && !document.activeElement.classList.contains("collapsible")) {
+            document.activeElement.click();
+        }
+    });
+
 
     function create_all_tags(tag_list){
         // ADDING ALL TAGS
@@ -77,6 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
             new_li_elem.textContent = tag_list[x];
             new_li_elem.classList.add('hidden');
             new_li_elem.classList.add('searchedTagItem');
+            //tabindex="0"
+            new_li_elem.setAttribute("tabindex","0")
             iTL_init.appendChild(new_li_elem);
             var new_li_elem_copy = new_li_elem.cloneNode(true);
             //new_li_elem_copy.classList.add('hidden');
@@ -309,16 +335,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 item.classList.add('hidden');
             }
         }
-    }
-
-    function wipe_and_display_new_res(results_found, page_number){
-        var res_container = document.getElementById("results_container");
-        res_container.replaceChildren();
-        var new_result_block = document.createElement('div');
-        var new_link = document.createElement('a');
-        var new_desc = document.createElement('p');
-        var is_even = false;
-        curr_first_result = page_number*(max_results_displayed)
     }
 
     // Search
