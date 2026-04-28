@@ -43,7 +43,7 @@
 
 .page_butt_holder {
   /* float: left; */
-  border: 1px solid #df7b01;
+  /* border: 1px solid #df7b01; */
   display: flex;
   justify-content: center;
   width: 100%
@@ -130,11 +130,11 @@ a:hover {
 }
 
 .rights_and_info {
-  border: 3px solid #9cdf01;
+  /* border: 3px solid #9cdf01; */
   margin-left: 1%;
   margin-right: 1%;
   font-size: 20px;
-  width: 50%
+  width: 30%
 }
 
 .rights_and_info_bottom {
@@ -155,7 +155,7 @@ a:hover {
 }
 
 .main_body_cont {
-  border: 2px solid #b40000;
+  /* border: 2px solid #b40000; */
   display: flex;
   justify-content: center
 }

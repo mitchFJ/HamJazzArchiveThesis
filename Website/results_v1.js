@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var max_results_displayed = 10;
     var curr_first_result = 0;
     var page_buttons_loaded = false;
-    var MAX_RESULTS = 57;
+    var MAX_RESULTS = 99;
 
     console.log("Hello World");
     console.log(coll.length);
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
     iTL.addEventListener('click', function(event){
         const searched_li_elem = event.target;
         const searched_text_cont = searched_li_elem.textContent;
-        // prepending and appending removes from cuur loc in elem
+        // prepending and appending removes from curr loc in elem
         var clicked_tag_to_be_shown = document.getElementById("include_tag_"+searched_text_cont.toLowerCase());
         var clicked_label_to_be_shown = document.getElementById("include_label_"+searched_text_cont.toLowerCase());
         clicked_tag_to_be_shown.classList.remove('hidden');
@@ -130,6 +130,31 @@ document.addEventListener('DOMContentLoaded', function() {
         if (clicked_tag_to_be_shown.checked){
             inc_place.insertBefore(clicked_label_to_be_shown,inc_place.children[2])
             inc_place.insertBefore(clicked_tag_to_be_shown,inc_place.children[2])
+        }
+        else {
+            console.log("Ending Box: " + inc_place.children[displayed_tags_inc*2+1].id);
+            console.log("Ending Label: " + inc_place.children[displayed_tags_inc*2+2].id);
+            var additive = 0
+            if (inc_place.children[displayed_tags_inc*2+2].id.substring(12)!=inc_place.children[displayed_tags_inc*2+1].id.substring(14) && inc_place.children[displayed_tags_inc*2+2].id.substring(14)!=inc_place.children[displayed_tags_inc*2+1].id.substring(12)) {
+                console.log("Inside");
+                additive+=1;
+                console.log("Ending Box: " + inc_place.children[displayed_tags_inc*2+1+additive].id);
+                console.log("Ending Label: " + inc_place.children[displayed_tags_inc*2+2+additive].id);
+            }
+            console.log(incl_label_focused.id)
+            console.log(incl_tag_focused.id)
+
+            document.startViewTransition(() => {
+                inc_place.insertBefore(incl_label_focused,inc_place.children[displayed_tags_inc*2+1+additive]);
+                inc_place.insertBefore(incl_tag_focused,inc_place.children[displayed_tags_inc*2+0+additive]);
+                console.log("1 2 3 4")
+                console.log(inc_place.children[displayed_tags_inc*2-1+additive].id)
+                console.log(inc_place.children[displayed_tags_inc*2+additive].id)
+                console.log(inc_place.children[displayed_tags_inc*2+1+additive].id)
+                console.log(inc_place.children[displayed_tags_inc*2+2+additive].id)
+                console.log(inc_place.children[displayed_tags_inc*2+3+additive].id)
+                console.log(inc_place.children[displayed_tags_inc*2+4+additive].id)
+            });
         }
         include_input.value="";
         inc_disp_tags();
@@ -181,11 +206,14 @@ document.addEventListener('DOMContentLoaded', function() {
             incl_tag_focused = clicked_inc_elem
             incl_label_focused = document.getElementById("include_label_"+id_spef)
             if (clicked_inc_elem.checked){
-                inc_place.insertBefore(incl_label_focused,inc_place.children[2]);
-                inc_place.insertBefore(incl_tag_focused,inc_place.children[2]);
+                document.startViewTransition(() => {
+                    inc_place.insertBefore(incl_label_focused,inc_place.children[2]);
+                    inc_place.insertBefore(incl_tag_focused,inc_place.children[2]);
+                });
+                console.log("Displayed Tags Inc: "+displayed_tags_inc);
             }
             else{
-                if (displayed_tags_inc<max_displayed_tags){
+                if (displayed_tags_inc<=max_displayed_tags){
 
                     var index_of_tag_focused = Array.prototype.indexOf.call(inc_place.children, incl_tag_focused);
                     var index_of_label_focused = index_of_tag_focused+1;
@@ -205,13 +233,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                         iterable_unfocused+=2;
                     }
-                    // console.log("Inserting before " + incl_label_focused,inc_place.children[target_of_tag_focused].id)
-                    inc_place.insertBefore(incl_tag_focused,inc_place.children[target_of_tag_focused]);
-                    // console.log("Inserting before " + incl_label_focused,inc_place.children[target_of_tag_focused].id)
-                    inc_place.insertBefore(incl_label_focused,inc_place.children[target_of_tag_focused]);
-                    // console.log("Ending Box: " + inc_place.children[target_of_tag_focused].id);
-                    // console.log("Ending Label: " + inc_place.children[target_of_label_focused].id);
-
+                    document.startViewTransition(() => {
+                        // console.log("Inserting before " + incl_label_focused,inc_place.children[target_of_tag_focused].id)
+                        inc_place.insertBefore(incl_tag_focused,inc_place.children[target_of_tag_focused+2]);
+                        // console.log("Inserting before " + incl_label_focused,inc_place.children[target_of_tag_focused].id)
+                        inc_place.insertBefore(incl_label_focused,inc_place.children[target_of_tag_focused+2]);
+                        // console.log("Ending Box: " + inc_place.children[target_of_tag_focused].id);
+                        // console.log("Ending Label: " + inc_place.children[target_of_label_focused].id);
+                    });
+                    console.log("Displayed Tags Inc :( : "+displayed_tags_inc);
                 }
                 else{
                     var index_of_tag_focused = Array.prototype.indexOf.call(inc_place.children, incl_tag_focused);
@@ -219,14 +249,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     var target_of_tag_focused = displayed_tags_inc*2+2;
                     var target_of_label_focused = displayed_tags_inc*2+3;
 
-                    inc_place.insertBefore(incl_label_focused,inc_place.children[target_of_label_focused]);
-                    inc_place.insertBefore(incl_tag_focused,inc_place.children[target_of_tag_focused]);
-                    // console.log("Ending Box: " + inc_place.children[displayed_tags_inc*2+1].id);
-                    // console.log("Ending Label: " + inc_place.children[displayed_tags_inc*2+2].id);
-                    inc_place.children[displayed_tags_inc*2+1].classList.add("hidden")
-                    inc_place.children[displayed_tags_inc*2+2].classList.add("hidden")
-                    displayed_tags_inc-=1;
-                    // console.log("Displayed Tags Inc: "+displayed_tags_inc);
+
+                    console.log("Ending Box: " + inc_place.children[displayed_tags_inc*2+1].id);
+                    console.log("Ending Label: " + inc_place.children[displayed_tags_inc*2+2].id);
+                    var additive = 0
+                    if (inc_place.children[displayed_tags_inc*2+2].id.substring(12)!=inc_place.children[displayed_tags_inc*2+1].id.substring(14) && inc_place.children[displayed_tags_inc*2+2].id.substring(14)!=inc_place.children[displayed_tags_inc*2+1].id.substring(12)) {
+                        console.log("Inside");
+                        additive+=1;
+                        console.log("Ending Box: " + inc_place.children[displayed_tags_inc*2+1+additive].id);
+                        console.log("Ending Label: " + inc_place.children[displayed_tags_inc*2+2+additive].id);
+                    }
+
+                    console.log(incl_label_focused.id)
+                    console.log(incl_tag_focused.id)
+
+                    document.startViewTransition(() => {
+                        inc_place.insertBefore(incl_label_focused,inc_place.children[displayed_tags_inc*2+1+additive]);
+                        inc_place.insertBefore(incl_tag_focused,inc_place.children[displayed_tags_inc*2+0+additive]);
+                        console.log("1 2 3 4")
+                        console.log(inc_place.children[displayed_tags_inc*2-1+additive].id)
+                        console.log(inc_place.children[displayed_tags_inc*2+additive].id)
+                        console.log(inc_place.children[displayed_tags_inc*2+1+additive].id)
+                        console.log(inc_place.children[displayed_tags_inc*2+2+additive].id)
+                        console.log(inc_place.children[displayed_tags_inc*2+3+additive].id)
+                        console.log(inc_place.children[displayed_tags_inc*2+4+additive].id)
+                        inc_place.children[displayed_tags_inc*2-1+additive].classList.add("hidden")
+                        inc_place.children[displayed_tags_inc*2+0+additive].classList.add("hidden")
+                        displayed_tags_inc-=1;
+                        console.log("Problem Displayed Tags Inc: "+displayed_tags_inc);
+                    });
                 }
             }
         }
@@ -448,9 +499,17 @@ document.addEventListener('DOMContentLoaded', function() {
     function search_archive() {
         console.log("Clicked");
         var res_container = document.getElementById("results_container");
+        res_container.replaceChildren();
+        
         var loading_results = document.createElement('p');
         loading_results.textContent = "Loading...";
         res_container.append(loading_results)
+
+        if (page_buttons_loaded) {
+            var pb_cont = document.getElementsByClassName("page_butt_holder")[0];
+            document.body.removeChild(pb_cont);
+            page_buttons_loaded = false;
+        }
 
         var query = document.getElementById("searchBar").value;
         var {inc_list: inc_list_master, exc_list: exc_list_master} = get_active_filters();
@@ -516,6 +575,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Printing our field of our response
             console.log(`Title of our response :  ${string.title}`);
             FULL_RESULTS = string.answer;
+            // page_buttons_loaded = false;
+            curr_first_result = 0;
             set_up_results(string.answer);
         })
         .catch(errorMsg => { console.log(errorMsg); });
