@@ -44,6 +44,7 @@
 .page_butt_holder {
   /* float: left; */
   /* border: 1px solid #df7b01; */
+  margin-top: 3%;
   display: flex;
   justify-content: center;
   width: 100%
@@ -129,12 +130,18 @@ a:hover {
   font-size: 25px
 }
 
+.page_butt_plac {
+  font-size: 17px;
+  margin-left: .5%;
+  margin-right: .5%
+}
+
 .rights_and_info {
   /* border: 3px solid #9cdf01; */
   margin-left: 1%;
   margin-right: 1%;
   font-size: 20px;
-  width: 30%
+  width: 100%
 }
 
 .rights_and_info_bottom {

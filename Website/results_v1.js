@@ -437,39 +437,177 @@ document.addEventListener('DOMContentLoaded', function() {
 
             var base_page_butt = document.createElement("button");
             base_page_butt.classList.add("page_button");
+            var base_page_butt_plac = document.createElement("p");
+            base_page_butt_plac.classList.add("page_butt_plac");
+            base_page_butt_plac.classList.add("hidden");
 
             var clone_prev_butt = base_page_butt.cloneNode(true);
             clone_prev_butt.textContent = "<- Prev"
+            var clone_prev_plac = base_page_butt_plac.cloneNode(true);
+            clone_prev_plac.textContent = "<- Prev"
+
             clone_prev_butt.addEventListener("click", function(event){
                 if (((curr_first_result/max_results_displayed)-1)*max_results_displayed >= 0)
                     curr_first_result = ((curr_first_result/max_results_displayed)-1)*max_results_displayed;
-                console.log("NOW: "+ curr_first_result);
+
+                    var ind_of_page = (curr_first_result/max_results_displayed)+1;
+                    // displays newly selected page's text equiv and hides others.
+                    var only_placs = document.getElementsByClassName("page_butt_plac");
+                    only_placs = Array.from(only_placs)
+                    // only_placs = only_placs.slice(0,only_placs.length-3);
+                    console.log(ind_of_page)
+                    for (var pag_but_ind in only_placs) {
+                        var pag_but_plac = only_placs[pag_but_ind]
+                        // console.log(pag_but_plac)
+                        console.log(pag_but_plac.textContent)
+                        console.log(pag_but_plac.textContent == ind_of_page)
+                        if (pag_but_plac.textContent == ind_of_page || (ind_of_page == 1 && pag_but_plac.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
+                            console.log("Functional on "+pag_but_plac.textContent+".")
+                            pag_but_plac.classList.remove("hidden")
+                        }
+                        else if (!pag_but_plac.classList.contains("hidden")){
+                            pag_but_plac.classList.add("hidden");
+                        }
+                    }
+                    
+                    // swaps selected page button for previously selected page button
+                    var only_buttons = document.getElementsByClassName("page_button");
+                    only_buttons = Array.from(only_buttons)
+                    
+                    console.log(ind_of_page)
+                    for (var pag_but_ind in only_buttons) {
+                        var pag_but = only_buttons[pag_but_ind]
+                        // console.log(pag_but)
+                        console.log(pag_but.textContent)
+                        console.log(pag_but.textContent == ind_of_page)
+                        if (pag_but.textContent == ind_of_page || (ind_of_page == 1 && pag_but.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but.textContent == "Next ->")){
+                            console.log("Functional on "+pag_but.textContent+".")
+                            pag_but.classList.add("hidden")
+                        }
+                        else if (pag_but.classList.contains("hidden")){
+                            pag_but.classList.remove("hidden");
+                        }
+                    }
                 set_up_results(FULL_RESULTS);
             });
-            pb_div.appendChild(clone_prev_butt);
 
-            console.log(Math.ceil(results_found.length/max_results_displayed));
+            // Because we always start on page 1:
+            clone_prev_butt.classList.add("hidden");
+            clone_prev_plac.classList.remove("hidden");
+            // Add to document
+            pb_div.appendChild(clone_prev_butt);
+            pb_div.appendChild(clone_prev_plac);
+
             for (var page_num = 1; page_num <= Math.ceil(results_found.length/max_results_displayed); page_num++){
-                console.log(" HI "+page_num)
                 var clone_page_butt = base_page_butt.cloneNode(true);
                 clone_page_butt.textContent = page_num;
+                var clone_page_plac = base_page_butt_plac.cloneNode(true);
+                clone_page_plac.textContent = page_num;
+
                 clone_page_butt.addEventListener("click", function(event){
+                    var clicked_button = event.target;
                     curr_first_result = (event.target.textContent-1)*max_results_displayed;
-                    console.log("NOW: "+ curr_first_result);
+                    // displays newly selected page's text equiv and hides others.
+                    var only_placs = document.getElementsByClassName("page_butt_plac");
+                    only_placs = Array.from(only_placs)
+                    // only_placs = only_placs.slice(0,only_placs.length-3);
+                    console.log(clicked_button.textContent)
+                    for (var pag_but_ind in only_placs) {
+                        var pag_but_plac = only_placs[pag_but_ind]
+                        // console.log(pag_but_plac)
+                        console.log(pag_but_plac.textContent)
+                        console.log(pag_but_plac.textContent == clicked_button.textContent)
+                        if (pag_but_plac.textContent == clicked_button.textContent || (clicked_button.textContent == 1 && pag_but_plac.textContent == "<- Prev") || (clicked_button.textContent == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
+                            console.log("Functional on "+pag_but_plac.textContent+".")
+                            pag_but_plac.classList.remove("hidden")
+                        }
+                        else if (!pag_but_plac.classList.contains("hidden")){
+                            pag_but_plac.classList.add("hidden");
+                        }
+                    }
+                    
+                    // swaps selected page button for previously selected page button
+                    var only_buttons = document.getElementsByClassName("page_button");
+                    only_buttons = Array.from(only_buttons)
+                    
+                    console.log(clicked_button.textContent)
+                    for (var pag_but_ind in only_buttons) {
+                        var pag_but = only_buttons[pag_but_ind]
+                        // console.log(pag_but)
+                        console.log(pag_but.textContent)
+                        console.log(pag_but.textContent == clicked_button.textContent)
+                        if (pag_but.textContent == clicked_button.textContent || (clicked_button.textContent == 1 && pag_but.textContent == "<- Prev") || (clicked_button.textContent == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but.textContent == "Next ->")){
+                            console.log("Functional on "+pag_but.textContent+".")
+                            pag_but.classList.add("hidden")
+                        }
+                        else if (pag_but.classList.contains("hidden")){
+                            pag_but.classList.remove("hidden");
+                        }
+                    }
+                    // console.log("NOW: "+ curr_first_result);
                     set_up_results(FULL_RESULTS);
                 });
+                // again, because we start on page 1
+                if (page_num == 1){
+                    clone_page_butt.classList.add("hidden");
+                    clone_page_plac.classList.remove("hidden");
+                }
                 pb_div.appendChild(clone_page_butt);
+                pb_div.appendChild(clone_page_plac);
             }
 
             var clone_next_butt = base_page_butt.cloneNode(true);
             clone_next_butt.textContent = "Next ->"
+            var clone_next_plac = base_page_butt_plac.cloneNode(true);
+            clone_next_plac.textContent = "Next ->"
             clone_next_butt.addEventListener("click", function(event){
-                if (((curr_first_result/max_results_displayed)+1)*max_results_displayed < results_found.length)
+                if (((curr_first_result/max_results_displayed)+1)*max_results_displayed < results_found.length){
                     curr_first_result = ((curr_first_result/max_results_displayed)+1)*max_results_displayed;
-                console.log("NOW: "+ curr_first_result);
-                set_up_results(FULL_RESULTS);
+
+                    var ind_of_page = (curr_first_result/max_results_displayed)+1;
+                    // displays newly selected page's text equiv and hides others.
+                    var only_placs = document.getElementsByClassName("page_butt_plac");
+                    only_placs = Array.from(only_placs)
+                    // only_placs = only_placs.slice(0,only_placs.length-3);
+                    console.log(ind_of_page)
+                    for (var pag_but_ind in only_placs) {
+                        var pag_but_plac = only_placs[pag_but_ind]
+                        // console.log(pag_but_plac)
+                        console.log(pag_but_plac.textContent)
+                        console.log(pag_but_plac.textContent == ind_of_page)
+                        if (pag_but_plac.textContent == ind_of_page || (ind_of_page == 1 && pag_but_plac.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
+                            console.log("Functional on "+pag_but_plac.textContent+".")
+                            pag_but_plac.classList.remove("hidden")
+                        }
+                        else if (!pag_but_plac.classList.contains("hidden")){
+                            pag_but_plac.classList.add("hidden");
+                        }
+                    }
+                    
+                    // swaps selected page button for previously selected page button
+                    var only_buttons = document.getElementsByClassName("page_button");
+                    only_buttons = Array.from(only_buttons)
+                    
+                    console.log(ind_of_page)
+                    for (var pag_but_ind in only_buttons) {
+                        var pag_but = only_buttons[pag_but_ind]
+                        // console.log(pag_but)
+                        console.log(pag_but.textContent)
+                        console.log(pag_but.textContent == ind_of_page)
+                        if (pag_but.textContent == ind_of_page || (ind_of_page == 1 && pag_but.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but.textContent == "Next ->")){
+                            console.log("Functional on "+pag_but.textContent+".")
+                            pag_but.classList.add("hidden")
+                        }
+                        else if (pag_but.classList.contains("hidden")){
+                            pag_but.classList.remove("hidden");
+                        }
+                    }
+
+                    set_up_results(FULL_RESULTS);
+                }
             });
             pb_div.appendChild(clone_next_butt);
+            pb_div.appendChild(clone_next_plac);
 
             page_buttons_loaded = true;
         }
