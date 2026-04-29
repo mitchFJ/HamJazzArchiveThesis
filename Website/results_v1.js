@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.addEventListener("keydown", function(e) {
         if (isTabbing && e.key === "Enter" && !document.activeElement.classList.contains("collapsible")) {
+            e.preventDefault();
             document.activeElement.click();
         }
     });
@@ -404,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var show_res_num = document.createElement('p');
         show_res_num.setAttribute("id","show_res_num");
-        show_res_num.textContent = results_found.length + " results found. Displaying "+(curr_first_result+1)+" - " + (curr_last_result) + ".";
+        show_res_num.textContent = results_found.length + " results found. Displaying page "+((curr_first_result/max_results_displayed)+1)+" of "+Math.ceil(FULL_RESULTS.length/max_results_displayed)+"; Results "+(curr_first_result+1)+" - " + (curr_last_result) + ".";
         res_container.append(show_res_num)
 
         // res_counter<max_res_displ
@@ -455,14 +456,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     var only_placs = document.getElementsByClassName("page_butt_plac");
                     only_placs = Array.from(only_placs)
                     // only_placs = only_placs.slice(0,only_placs.length-3);
-                    console.log(ind_of_page)
+                    // console.log(ind_of_page)
                     for (var pag_but_ind in only_placs) {
                         var pag_but_plac = only_placs[pag_but_ind]
                         // console.log(pag_but_plac)
-                        console.log(pag_but_plac.textContent)
-                        console.log(pag_but_plac.textContent == ind_of_page)
+                        // console.log(pag_but_plac.textContent)
+                        // console.log(pag_but_plac.textContent == ind_of_page)
                         if (pag_but_plac.textContent == ind_of_page || (ind_of_page == 1 && pag_but_plac.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
-                            console.log("Functional on "+pag_but_plac.textContent+".")
+                            // console.log("Functional on "+pag_but_plac.textContent+".")
                             pag_but_plac.classList.remove("hidden")
                         }
                         else if (!pag_but_plac.classList.contains("hidden")){
@@ -474,14 +475,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     var only_buttons = document.getElementsByClassName("page_button");
                     only_buttons = Array.from(only_buttons)
                     
-                    console.log(ind_of_page)
+                    // console.log(ind_of_page)
                     for (var pag_but_ind in only_buttons) {
                         var pag_but = only_buttons[pag_but_ind]
                         // console.log(pag_but)
-                        console.log(pag_but.textContent)
-                        console.log(pag_but.textContent == ind_of_page)
+                        // console.log(pag_but.textContent)
+                        // console.log(pag_but.textContent == ind_of_page)
                         if (pag_but.textContent == ind_of_page || (ind_of_page == 1 && pag_but.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but.textContent == "Next ->")){
-                            console.log("Functional on "+pag_but.textContent+".")
+                            // console.log("Functional on "+pag_but.textContent+".")
                             pag_but.classList.add("hidden")
                         }
                         else if (pag_but.classList.contains("hidden")){
@@ -511,14 +512,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     var only_placs = document.getElementsByClassName("page_butt_plac");
                     only_placs = Array.from(only_placs)
                     // only_placs = only_placs.slice(0,only_placs.length-3);
-                    console.log(clicked_button.textContent)
+                    // console.log(clicked_button.textContent)
                     for (var pag_but_ind in only_placs) {
                         var pag_but_plac = only_placs[pag_but_ind]
                         // console.log(pag_but_plac)
-                        console.log(pag_but_plac.textContent)
-                        console.log(pag_but_plac.textContent == clicked_button.textContent)
+                        // console.log(pag_but_plac.textContent)
+                        // console.log(pag_but_plac.textContent == clicked_button.textContent)
                         if (pag_but_plac.textContent == clicked_button.textContent || (clicked_button.textContent == 1 && pag_but_plac.textContent == "<- Prev") || (clicked_button.textContent == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
-                            console.log("Functional on "+pag_but_plac.textContent+".")
+                            // console.log("Functional on "+pag_but_plac.textContent+".")
                             pag_but_plac.classList.remove("hidden")
                         }
                         else if (!pag_but_plac.classList.contains("hidden")){
@@ -530,14 +531,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     var only_buttons = document.getElementsByClassName("page_button");
                     only_buttons = Array.from(only_buttons)
                     
-                    console.log(clicked_button.textContent)
+                    // console.log(clicked_button.textContent)
                     for (var pag_but_ind in only_buttons) {
                         var pag_but = only_buttons[pag_but_ind]
                         // console.log(pag_but)
-                        console.log(pag_but.textContent)
-                        console.log(pag_but.textContent == clicked_button.textContent)
+                        // console.log(pag_but.textContent)
+                        // console.log(pag_but.textContent == clicked_button.textContent)
                         if (pag_but.textContent == clicked_button.textContent || (clicked_button.textContent == 1 && pag_but.textContent == "<- Prev") || (clicked_button.textContent == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but.textContent == "Next ->")){
-                            console.log("Functional on "+pag_but.textContent+".")
+                            // console.log("Functional on "+pag_but.textContent+".")
                             pag_but.classList.add("hidden")
                         }
                         else if (pag_but.classList.contains("hidden")){
