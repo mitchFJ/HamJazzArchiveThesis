@@ -377,10 +377,23 @@ document.addEventListener('DOMContentLoaded', function() {
             clone_link.setAttribute("rel","noopener noreferrer");
             clone_link.textContent = results_found[res_counter + curr_first_result][0];
             clone_desc.textContent = "Page(s): "+results_found[res_counter + curr_first_result][2]+" - "+results_found[res_counter + curr_first_result][3];
+            clone_desc.innerHTML = clone_desc.innerHTML.replace(
+                results_found[res_counter + curr_first_result][4], 
+                `<mark>${results_found[res_counter + curr_first_result][4]}</mark>`
+            );
+
             res_container.append(clone_result_block);
             clone_result_block.append(clone_link);
             clone_result_block.append(clone_desc);
         }
+        console.log("---------------------")
+        console.log(FULL_RESULTS[0][0])
+        console.log(FULL_RESULTS[0][1])
+        console.log(FULL_RESULTS[0][2])
+        console.log(FULL_RESULTS[0][3])
+        console.log(FULL_RESULTS[0][4])
+        console.log(FULL_RESULTS[0][5])
+        console.log("---------------------")
 
         if (!page_buttons_loaded && results_found.length>max_results_displayed){
             const pb_div = document.createElement('div')

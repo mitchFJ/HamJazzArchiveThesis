@@ -4,6 +4,7 @@ from sentence_transformers import SentenceTransformer, util
 import pandas as pd
 import numpy as np
 from pathlib import Path
+import re
 #import filter_sys
 
 # Website Communication Imports
@@ -162,12 +163,33 @@ class jazzDataModule():
             similar = util.cos_sim(query_encode, self.encode_list[i])
             if (similar > self.best_respones[-1]):
                 self.insert_response(i, similar)
+            
+        sentence_sections = []
+        split_sentence_sections = []
+        for sentence in self.best_sentences:
+            split = re.split(r"\.\n|\. |\n", sentence.strip())
+            sentence_sections.extend(split)
+            split_sentence_sections.append(split)
+
+        small_encode = self.tokenize(sentence_sections).astype(np.float64)
+        highlight = []
+        num = 0
+        for sentence in split_sentence_sections:
+            max = 0
+            best_line = ""
+            for line in sentence:
+                if (util.cos_sim(small_encode[num], query_encode) > max):
+                    max = util.cos_sim(small_encode[num], query_encode)
+                    best_line = line
+                num += 1
+            highlight.append(best_line)
+
         response = []
         for i in range(len(self.best_respones)):
             if (self.best_pages[i][0] == "["):
-                this_response = [self.best_display[i], self.best_url[i] + self.best_pages[i][1:self.best_pages[i].find(",")], self.best_pages[i], self.best_sentences[i]]
+                this_response = [self.best_display[i], self.best_url[i] + self.best_pages[i][1:self.best_pages[i].find(",")], self.best_pages[i], self.best_sentences[i], highlight[i]]
             else:
-                this_response = [self.best_display[i], self.best_url[i] + self.best_pages[i], self.best_pages[i], self.best_sentences[i]]
+                this_response = [self.best_display[i], self.best_url[i] + self.best_pages[i], self.best_pages[i], self.best_sentences[i], highlight[i]]
             response.append(this_response)
         return response
 
