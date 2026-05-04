@@ -1,9 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     var coll = document.getElementsByClassName("collapsible");
     var collapsi;
+    var max_init_display = 5;
     var displayed_tags_inc = 0;
+    var inc_checked_counter = 0;
+    var inc_showing_more = false;
     var displayed_tags_exc = 0;
-    var max_displayed_tags = 10;
+    var exc_checked_counter = 0;
+    var exc_showing_more = false;
+
+    var max_displayed_tags = 5;
 
     var FULL_RESULTS = []
     var max_results_displayed = 10;
@@ -32,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const exc_place = document.getElementById('exclude_div');
 
     // Disables 'Exclude' tag filter
-    coll[1].classList.add("hidden");
+    // coll[1].classList.add("hidden");
 
     var isTabbing = false;
     window.addEventListener('keydown', (e) => {
@@ -60,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function create_all_tags(tag_list){
         // ADDING ALL TAGS
+        tag_list.sort();
         const br = document.createElement('br');
         const iTL_init = document.getElementById('includeTagsList');
         const eTL_init = document.getElementById('excludeTagsList');
@@ -74,9 +81,9 @@ document.addEventListener('DOMContentLoaded', function() {
             new_label.setAttribute("for","include_tag_"+tag_list[x].toLowerCase());
             new_label.classList.add("respect_breaks")
             new_label.textContent = tag_list[x]+'\n';
-            if (x>4){
-                new_check.classList.add("hidden")
-                new_label.classList.add("hidden")
+            if (x>=max_init_display){
+                new_check.classList.add("hidden");
+                new_label.classList.add("hidden");
             }
             else{
                 displayed_tags_inc+=1;
@@ -110,6 +117,42 @@ document.addEventListener('DOMContentLoaded', function() {
             eTL_init.appendChild(new_li_elem_copy);
             tag_list_master.push(tag_list[x]);
         }
+        var show_inc_button = document.createElement("button");
+        show_inc_button.classList.add("show_more_button");
+        show_inc_button.textContent = "Show More ("+(tag_list.length-max_init_display)+")";
+        var show_exc_button = show_inc_button.cloneNode(true);
+        inc_place.appendChild(show_inc_button);
+        exc_place.appendChild(show_exc_button);
+        // console.log("HIIIIIIII")
+        // console.log(place_children[place_children.length-1])
+        show_inc_button.addEventListener('click', function(){
+            var place_children = Array.from(inc_place.children).slice(2,inc_place.children.length-1);
+            for (var index = 0; index < place_children.length; index++){
+                if (place_children[index].classList.contains("hidden") && !inc_showing_more){
+                    place_children[index].classList.remove("hidden");
+                    show_inc_button.textContent = "Show Less";
+                }
+                else if(index>displayed_tags_inc*2-1 && inc_showing_more) {
+                    place_children[index].classList.add("hidden");
+                    show_inc_button.textContent = "Show More ("+(tag_list.length-max_init_display)+")";
+                }
+            }
+            inc_showing_more = !inc_showing_more;
+        })
+        show_exc_button.addEventListener('click', function(){
+            var place_children = Array.from(exc_place.children).slice(2,exc_place.children.length-1);
+            for (var index = 0; index < place_children.length; index++){
+                if (place_children[index].classList.contains("hidden") && !exc_showing_more){
+                    place_children[index].classList.remove("hidden");
+                    show_exc_button.textContent = "Show Less";
+                }
+                else if(index>displayed_tags_exc*2-1 && exc_showing_more) {
+                    place_children[index].classList.add("hidden");
+                    show_exc_button.textContent = "Show More ("+(tag_list.length-max_init_display)+")";
+                }
+            }
+            exc_showing_more = !exc_showing_more;
+        })
     }
 
     var iTL = document.getElementById('includeTagsList');
@@ -124,162 +167,95 @@ document.addEventListener('DOMContentLoaded', function() {
         var clicked_label_to_be_shown = document.getElementById("include_label_"+searched_text_cont.toLowerCase());
         clicked_tag_to_be_shown.classList.remove('hidden');
         clicked_label_to_be_shown.classList.remove('hidden');
-        displayed_tags_inc+=1;
+        // displayed_tags_inc+=1;
         // console.log("Disp_tags_inc"+displayed_tags_inc)
-        clicked_tag_to_be_shown.checked = !clicked_tag_to_be_shown.checked;
-        // Puts it at top if newly checked
+        // clicked_tag_to_be_shown.checked = !clicked_tag_to_be_shown.checked;
+        clicked_tag_to_be_shown.click();
         if (clicked_tag_to_be_shown.checked){
-            inc_place.insertBefore(clicked_label_to_be_shown,inc_place.children[2])
-            inc_place.insertBefore(clicked_tag_to_be_shown,inc_place.children[2])
-        }
-        else {
-            console.log("Ending Box: " + inc_place.children[displayed_tags_inc*2+1].id);
-            console.log("Ending Label: " + inc_place.children[displayed_tags_inc*2+2].id);
-            var additive = 0
-            if (inc_place.children[displayed_tags_inc*2+2].id.substring(12)!=inc_place.children[displayed_tags_inc*2+1].id.substring(14) && inc_place.children[displayed_tags_inc*2+2].id.substring(14)!=inc_place.children[displayed_tags_inc*2+1].id.substring(12)) {
-                console.log("Inside");
-                additive+=1;
-                console.log("Ending Box: " + inc_place.children[displayed_tags_inc*2+1+additive].id);
-                console.log("Ending Label: " + inc_place.children[displayed_tags_inc*2+2+additive].id);
-            }
-            console.log(incl_label_focused.id)
-            console.log(incl_tag_focused.id)
-
-            document.startViewTransition(() => {
-                inc_place.insertBefore(incl_label_focused,inc_place.children[displayed_tags_inc*2+1+additive]);
-                inc_place.insertBefore(incl_tag_focused,inc_place.children[displayed_tags_inc*2+0+additive]);
-                console.log("1 2 3 4")
-                console.log(inc_place.children[displayed_tags_inc*2-1+additive].id)
-                console.log(inc_place.children[displayed_tags_inc*2+additive].id)
-                console.log(inc_place.children[displayed_tags_inc*2+1+additive].id)
-                console.log(inc_place.children[displayed_tags_inc*2+2+additive].id)
-                console.log(inc_place.children[displayed_tags_inc*2+3+additive].id)
-                console.log(inc_place.children[displayed_tags_inc*2+4+additive].id)
-            });
+            displayed_tags_inc+=1;
         }
         include_input.value="";
         inc_disp_tags();
-        if (displayed_tags_inc>=max_displayed_tags && !inc_place.children[displayed_tags_inc*2].checked){
-            console.log("Removing tag from visible: " + inc_place.children[displayed_tags_inc*2].id);
-            console.log("Removing corresponding label: " + inc_place.children[displayed_tags_inc*2+1].id);
-            inc_place.children[displayed_tags_inc*2].classList.add("hidden");
-            inc_place.children[displayed_tags_inc*2+1].classList.add("hidden");
-            displayed_tags_inc-=1;
-        }
     });
     // Exclude ver
     eTL.addEventListener('click', function(event){
         const searched_li_elem = event.target;
         const searched_text_cont = searched_li_elem.textContent;
-        // prepending and appending removes from cuur loc in elem
         var clicked_tag_to_be_shown = document.getElementById("exclude_tag_"+searched_text_cont.toLowerCase());
         var clicked_label_to_be_shown = document.getElementById("exclude_label_"+searched_text_cont.toLowerCase());
         clicked_tag_to_be_shown.classList.remove('hidden');
         clicked_label_to_be_shown.classList.remove('hidden');
-        displayed_tags_exc+=1;
-        console.log("Disp_tags_exc"+displayed_tags_exc)
-        clicked_tag_to_be_shown.checked = !clicked_tag_to_be_shown.checked;
-        // Puts it at top if newly checked
+        clicked_tag_to_be_shown.click();
         if (clicked_tag_to_be_shown.checked){
-            exc_place.insertBefore(clicked_label_to_be_shown,exc_place.children[2])
-            exc_place.insertBefore(clicked_tag_to_be_shown,exc_place.children[2])
+            displayed_tags_exc+=1;
         }
         exclude_input.value="";
         exc_disp_tags();
-        if (displayed_tags_exc>=max_displayed_tags && !exc_place.children[displayed_tags_exc*2].checked){
-            console.log("Removing tag from visible: " + exc_place.children[displayed_tags_exc*2].id);
-            console.log("Removing corresponding label: " + exc_place.children[displayed_tags_exc*2+1].id);
-            exc_place.children[displayed_tags_exc*2].classList.add("hidden");
-            exc_place.children[displayed_tags_exc*2+1].classList.add("hidden");
-            displayed_tags_exc-=1;
-        }
     });
+
     // balance
     inc_place.addEventListener('click', function(event){
         const clicked_inc_elem = event.target;
         const id_pref = clicked_inc_elem.id.substring(0,12);
         const id_spef = clicked_inc_elem.id.substring(12)
-        // console.log("Id: "+clicked_inc_elem.id)
-        // console.log("Id: "+clicked_inc_elem.id.substring(0,12))
-        // console.log("Id: "+clicked_inc_elem.id.substring(12))
-        // console.log("Disp_tags_inc"+displayed_tags_inc)
         if (id_pref == "include_tag_"){
-            incl_tag_focused = clicked_inc_elem
-            incl_label_focused = document.getElementById("include_label_"+id_spef)
+            incl_tag_focused = clicked_inc_elem;
+            incl_label_focused = document.getElementById("include_label_"+id_spef);
             if (clicked_inc_elem.checked){
+                if (inc_showing_more){
+                    displayed_tags_inc+=1;
+                }
+                inc_checked_counter+=1;
                 document.startViewTransition(() => {
                     inc_place.insertBefore(incl_label_focused,inc_place.children[2]);
                     inc_place.insertBefore(incl_tag_focused,inc_place.children[2]);
+
+                    // console.log("Displayed Tags Inc: "+displayed_tags_inc);
+                    // console.log("Index: "+(2))
+                    // var temp_inc_plac_chil = Array.from(inc_place.children).slice(2,inc_place.children.length-1);
+                    // for (var test = 0; test < temp_inc_plac_chil.length; test++){
+                    //     console.log(temp_inc_plac_chil[test].id)
+                    // }
+                    // console.log("01")
+                    // console.log(temp_inc_plac_chil[0].id);
+                    // console.log(temp_inc_plac_chil[1].id);
                 });
-                console.log("Displayed Tags Inc: "+displayed_tags_inc);
             }
             else{
-                if (displayed_tags_inc<=max_displayed_tags){
-
-                    var index_of_tag_focused = Array.prototype.indexOf.call(inc_place.children, incl_tag_focused);
-                    var index_of_label_focused = index_of_tag_focused+1;
-                    var target_of_tag_focused = max_displayed_tags*2;
-                    var target_of_label_focused = max_displayed_tags*2+1;
-                    var found_space = false;
-                    var iterable_unfocused = index_of_tag_focused + 2;
-
-                    console.log(index_of_tag_focused)
-                    while (!found_space && iterable_unfocused<displayed_tags_inc*2+2) {
-                        // console.log("Curr Box: " + inc_place.children[iterable_unfocused].id + ", " + iterable_unfocused);
-                        if (!inc_place.children[iterable_unfocused].checked){
-                            found_space = true;
-                            target_of_tag_focused = iterable_unfocused;
-                            target_of_label_focused = iterable_unfocused+1;
-                            // console.log("New: "+target_of_tag_focused+", "+target_of_label_focused)
+                incl_tag_focused = clicked_inc_elem;
+                incl_label_focused = document.getElementById("include_label_"+id_spef);
+                // console.log("Index: "+(2+(inc_checked_counter*2)));
+                var temp_inc_plac_chil = Array.from(inc_place.children).slice(2+(inc_checked_counter*2),inc_place.children.length-1);
+                // for (var test = 0; test < temp_inc_plac_chil.length; test++){
+                //     console.log(temp_inc_plac_chil[test].id)
+                // }
+                // console.log("01")
+                // console.log(temp_inc_plac_chil[0].id);
+                // console.log(temp_inc_plac_chil[1].id);
+                for (var inc_lab_ind = 0; inc_lab_ind < temp_inc_plac_chil.length; inc_lab_ind++){
+                    if (inc_lab_ind%2!=0){
+                        // console.log(temp_inc_plac_chil[inc_lab_ind].id);
+                        // console.log(incl_label_focused.id);
+                        if (temp_inc_plac_chil[inc_lab_ind].id>incl_label_focused.id){
+                            // console.log("Found insert at: "+(inc_lab_ind+1+inc_checked_counter*2));
+                            // console.log(inc_place.children[inc_lab_ind+1+inc_checked_counter*2].id)
+                            inc_place.insertBefore(incl_label_focused,inc_place.children[inc_lab_ind+1+inc_checked_counter*2]);
+                            // console.log("Found insert at: "+(inc_lab_ind+inc_checked_counter*2));
+                            // console.log(inc_place.children[inc_lab_ind+inc_checked_counter*2].id)
+                            inc_place.insertBefore(incl_tag_focused,inc_place.children[inc_lab_ind+inc_checked_counter*2]);
+                            // console.log("new place: "+inc_lab_ind+" "+(inc_lab_ind+1))
+                            // console.log(displayed_tags_inc*2)
+                            // console.log(max_displayed_tags*2)
+                            if (displayed_tags_inc*2>max_displayed_tags*2 && !inc_showing_more){
+                                incl_tag_focused.classList.add("hidden");
+                                incl_label_focused.classList.add("hidden");
+                                displayed_tags_inc-=1;
+                            }
+                            break;
                         }
-                        iterable_unfocused+=2;
                     }
-                    document.startViewTransition(() => {
-                        // console.log("Inserting before " + incl_label_focused,inc_place.children[target_of_tag_focused].id)
-                        inc_place.insertBefore(incl_tag_focused,inc_place.children[target_of_tag_focused+2]);
-                        // console.log("Inserting before " + incl_label_focused,inc_place.children[target_of_tag_focused].id)
-                        inc_place.insertBefore(incl_label_focused,inc_place.children[target_of_tag_focused+2]);
-                        // console.log("Ending Box: " + inc_place.children[target_of_tag_focused].id);
-                        // console.log("Ending Label: " + inc_place.children[target_of_label_focused].id);
-                    });
-                    console.log("Displayed Tags Inc :( : "+displayed_tags_inc);
                 }
-                else{
-                    var index_of_tag_focused = Array.prototype.indexOf.call(inc_place.children, incl_tag_focused);
-                    var index_of_label_focused = index_of_tag_focused+1;
-                    var target_of_tag_focused = displayed_tags_inc*2+2;
-                    var target_of_label_focused = displayed_tags_inc*2+3;
-
-
-                    console.log("Ending Box: " + inc_place.children[displayed_tags_inc*2+1].id);
-                    console.log("Ending Label: " + inc_place.children[displayed_tags_inc*2+2].id);
-                    var additive = 0
-                    if (inc_place.children[displayed_tags_inc*2+2].id.substring(12)!=inc_place.children[displayed_tags_inc*2+1].id.substring(14) && inc_place.children[displayed_tags_inc*2+2].id.substring(14)!=inc_place.children[displayed_tags_inc*2+1].id.substring(12)) {
-                        console.log("Inside");
-                        additive+=1;
-                        console.log("Ending Box: " + inc_place.children[displayed_tags_inc*2+1+additive].id);
-                        console.log("Ending Label: " + inc_place.children[displayed_tags_inc*2+2+additive].id);
-                    }
-
-                    console.log(incl_label_focused.id)
-                    console.log(incl_tag_focused.id)
-
-                    document.startViewTransition(() => {
-                        inc_place.insertBefore(incl_label_focused,inc_place.children[displayed_tags_inc*2+1+additive]);
-                        inc_place.insertBefore(incl_tag_focused,inc_place.children[displayed_tags_inc*2+0+additive]);
-                        console.log("1 2 3 4")
-                        console.log(inc_place.children[displayed_tags_inc*2-1+additive].id)
-                        console.log(inc_place.children[displayed_tags_inc*2+additive].id)
-                        console.log(inc_place.children[displayed_tags_inc*2+1+additive].id)
-                        console.log(inc_place.children[displayed_tags_inc*2+2+additive].id)
-                        console.log(inc_place.children[displayed_tags_inc*2+3+additive].id)
-                        console.log(inc_place.children[displayed_tags_inc*2+4+additive].id)
-                        inc_place.children[displayed_tags_inc*2-1+additive].classList.add("hidden")
-                        inc_place.children[displayed_tags_inc*2+0+additive].classList.add("hidden")
-                        displayed_tags_inc-=1;
-                        console.log("Problem Displayed Tags Inc: "+displayed_tags_inc);
-                    });
-                }
+                inc_checked_counter-=1;
             }
         }
     });
@@ -288,63 +264,38 @@ document.addEventListener('DOMContentLoaded', function() {
         const clicked_exc_elem = event.target;
         const id_pref = clicked_exc_elem.id.substring(0,12);
         const id_spef = clicked_exc_elem.id.substring(12)
-        console.log("Here where I want to be, "+ id_pref)
-        console.log("Id: "+clicked_exc_elem.id)
-        console.log("Id: "+clicked_exc_elem.id.substring(0,12))
-        console.log("Id: "+clicked_exc_elem.id.substring(12))
-        console.log("Disp_tags_exc"+displayed_tags_exc)
         if (id_pref == "exclude_tag_"){
-            excl_tag_focused = clicked_exc_elem
-            excl_label_focused = document.getElementById("exclude_label_"+id_spef)
+            excl_tag_focused = clicked_exc_elem;
+            excl_label_focused = document.getElementById("exclude_label_"+id_spef);
             if (clicked_exc_elem.checked){
-                exc_place.insertBefore(excl_label_focused,exc_place.children[2]);
-                exc_place.insertBefore(excl_tag_focused,exc_place.children[2]);
+                if (exc_showing_more){
+                    displayed_tags_exc+=1;
+                }
+                exc_checked_counter+=1;
+                document.startViewTransition(() => {
+                    exc_place.insertBefore(excl_label_focused,exc_place.children[2]);
+                    exc_place.insertBefore(excl_tag_focused,exc_place.children[2]);
+                });
             }
             else{
-                if (displayed_tags_exc<max_displayed_tags){
-
-                    var index_of_tag_focused = Array.prototype.indexOf.call(exc_place.children, excl_tag_focused);
-                    var index_of_label_focused = index_of_tag_focused+1;
-                    var target_of_tag_focused = max_displayed_tags*2;
-                    var target_of_label_focused = max_displayed_tags*2+1;
-                    var found_space = false;
-                    var iterable_unfocused = index_of_tag_focused + 2;
-
-                    console.log(index_of_tag_focused)
-                    while (!found_space && iterable_unfocused<displayed_tags_exc*2+2) {
-                        console.log("Curr Box: " + exc_place.children[iterable_unfocused].id + ", " + iterable_unfocused);
-                        if (!exc_place.children[iterable_unfocused].checked){
-                            found_space = true;
-                            target_of_tag_focused = iterable_unfocused;
-                            target_of_label_focused = iterable_unfocused+1;
-                            console.log("New: "+target_of_tag_focused+", "+target_of_label_focused)
+                excl_tag_focused = clicked_exc_elem;
+                excl_label_focused = document.getElementById("exclude_label_"+id_spef);
+                var temp_exc_plac_chil = Array.from(exc_place.children).slice(2+(exc_checked_counter*2),exc_place.children.length-1);
+                for (var exc_lab_ind = 0; exc_lab_ind < temp_exc_plac_chil.length; exc_lab_ind++){
+                    if (exc_lab_ind%2!=0){
+                        if (temp_exc_plac_chil[exc_lab_ind].id>excl_label_focused.id){
+                            exc_place.insertBefore(excl_label_focused,exc_place.children[exc_lab_ind+1+exc_checked_counter*2]);
+                            exc_place.insertBefore(excl_tag_focused,exc_place.children[exc_lab_ind+exc_checked_counter*2]);
+                            if (displayed_tags_exc*2>max_displayed_tags*2 && !exc_showing_more){
+                                excl_tag_focused.classList.add("hidden");
+                                excl_label_focused.classList.add("hidden");
+                                displayed_tags_exc-=1;
+                            }
+                            break;
                         }
-                        iterable_unfocused+=2;
                     }
-                    console.log("Inserting before " + excl_label_focused,exc_place.children[target_of_tag_focused].id)
-
-                    exc_place.insertBefore(excl_tag_focused,exc_place.children[target_of_tag_focused]);
-                    console.log("Inserting before " + excl_label_focused,exc_place.children[target_of_tag_focused].id)
-                    exc_place.insertBefore(excl_label_focused,exc_place.children[target_of_tag_focused]);
-                    console.log("Ending Box: " + exc_place.children[target_of_tag_focused].id);
-                    console.log("Ending Label: " + exc_place.children[target_of_label_focused].id);
-
                 }
-                else{
-                    var index_of_tag_focused = Array.prototype.indexOf.call(exc_place.children, excl_tag_focused);
-                    var index_of_label_focused = index_of_tag_focused+1;
-                    var target_of_tag_focused = displayed_tags_exc*2+2;
-                    var target_of_label_focused = displayed_tags_exc*2+3;
-
-                    exc_place.insertBefore(excl_label_focused,exc_place.children[target_of_label_focused]);
-                    exc_place.insertBefore(excl_tag_focused,exc_place.children[target_of_tag_focused]);
-                    console.log("Ending Box: " + exc_place.children[displayed_tags_exc*2+1].id);
-                    console.log("Ending Label: " + exc_place.children[displayed_tags_exc*2+2].id);
-                    exc_place.children[displayed_tags_exc*2+1].classList.add("hidden")
-                    exc_place.children[displayed_tags_exc*2+2].classList.add("hidden")
-                    displayed_tags_exc-=1
-                    console.log("Displayed Tags Exc: "+displayed_tags_exc);
-                }
+                exc_checked_counter-=1;
             }
         }
     });
@@ -455,13 +406,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // displays newly selected page's text equiv and hides others.
                     var only_placs = document.getElementsByClassName("page_butt_plac");
                     only_placs = Array.from(only_placs)
-                    // only_placs = only_placs.slice(0,only_placs.length-3);
-                    // console.log(ind_of_page)
                     for (var pag_but_ind in only_placs) {
                         var pag_but_plac = only_placs[pag_but_ind]
-                        // console.log(pag_but_plac)
-                        // console.log(pag_but_plac.textContent)
-                        // console.log(pag_but_plac.textContent == ind_of_page)
                         if (pag_but_plac.textContent == ind_of_page || (ind_of_page == 1 && pag_but_plac.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
                             // console.log("Functional on "+pag_but_plac.textContent+".")
                             pag_but_plac.classList.remove("hidden")
@@ -478,9 +424,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     // console.log(ind_of_page)
                     for (var pag_but_ind in only_buttons) {
                         var pag_but = only_buttons[pag_but_ind]
-                        // console.log(pag_but)
-                        // console.log(pag_but.textContent)
-                        // console.log(pag_but.textContent == ind_of_page)
                         if (pag_but.textContent == ind_of_page || (ind_of_page == 1 && pag_but.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but.textContent == "Next ->")){
                             // console.log("Functional on "+pag_but.textContent+".")
                             pag_but.classList.add("hidden")
@@ -511,13 +454,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // displays newly selected page's text equiv and hides others.
                     var only_placs = document.getElementsByClassName("page_butt_plac");
                     only_placs = Array.from(only_placs)
-                    // only_placs = only_placs.slice(0,only_placs.length-3);
-                    // console.log(clicked_button.textContent)
                     for (var pag_but_ind in only_placs) {
                         var pag_but_plac = only_placs[pag_but_ind]
-                        // console.log(pag_but_plac)
-                        // console.log(pag_but_plac.textContent)
-                        // console.log(pag_but_plac.textContent == clicked_button.textContent)
                         if (pag_but_plac.textContent == clicked_button.textContent || (clicked_button.textContent == 1 && pag_but_plac.textContent == "<- Prev") || (clicked_button.textContent == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
                             // console.log("Functional on "+pag_but_plac.textContent+".")
                             pag_but_plac.classList.remove("hidden")
@@ -531,12 +469,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     var only_buttons = document.getElementsByClassName("page_button");
                     only_buttons = Array.from(only_buttons)
                     
-                    // console.log(clicked_button.textContent)
                     for (var pag_but_ind in only_buttons) {
                         var pag_but = only_buttons[pag_but_ind]
-                        // console.log(pag_but)
-                        // console.log(pag_but.textContent)
-                        // console.log(pag_but.textContent == clicked_button.textContent)
                         if (pag_but.textContent == clicked_button.textContent || (clicked_button.textContent == 1 && pag_but.textContent == "<- Prev") || (clicked_button.textContent == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but.textContent == "Next ->")){
                             // console.log("Functional on "+pag_but.textContent+".")
                             pag_but.classList.add("hidden")
@@ -545,7 +479,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             pag_but.classList.remove("hidden");
                         }
                     }
-                    // console.log("NOW: "+ curr_first_result);
                     set_up_results(FULL_RESULTS);
                 });
                 // again, because we start on page 1
@@ -568,14 +501,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     var ind_of_page = (curr_first_result/max_results_displayed)+1;
                     // displays newly selected page's text equiv and hides others.
                     var only_placs = document.getElementsByClassName("page_butt_plac");
-                    only_placs = Array.from(only_placs)
-                    // only_placs = only_placs.slice(0,only_placs.length-3);
-                    console.log(ind_of_page)
+                    only_placs = Array.from(only_placs);
+                    console.log(ind_of_page);
                     for (var pag_but_ind in only_placs) {
-                        var pag_but_plac = only_placs[pag_but_ind]
-                        // console.log(pag_but_plac)
-                        console.log(pag_but_plac.textContent)
-                        console.log(pag_but_plac.textContent == ind_of_page)
+                        var pag_but_plac = only_placs[pag_but_ind];
+                        console.log(pag_but_plac.textContent);
+                        // console.log(pag_but_plac.textContent == ind_of_page);
                         if (pag_but_plac.textContent == ind_of_page || (ind_of_page == 1 && pag_but_plac.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
                             console.log("Functional on "+pag_but_plac.textContent+".")
                             pag_but_plac.classList.remove("hidden")

@@ -15,6 +15,12 @@
   background-color: #ccc;
 }
 
+.collapsible:focus-visible {
+  background-color: #ccc;
+  outline: 2px solid #F16E00; /* OR #F16E00 / #DD3603 */
+  /* outline-offset: 2px; */
+}
+
 .content {
   padding: 0 18px;
   display: none;
@@ -24,7 +30,7 @@
 
 .column1_obj {
   float: left;
-  /*border: 1px solid #df7b01;*/
+  /* border: 5px solid #df7b01; */
   width: 75%;
   margin-right: 10px;
   margin-left: 10px
@@ -136,12 +142,20 @@ a:hover {
   margin-right: .5%
 }
 
+.guidelines {
+  /* border: 3px solid #9cdf01; */
+  margin-left: 1%;
+  margin-right: 1%;
+  font-size: 20px;
+  /* width: 100% */
+}
+
 .rights_and_info {
   /* border: 3px solid #9cdf01; */
   margin-left: 1%;
   margin-right: 1%;
   font-size: 20px;
-  width: 100%
+  /* width: 100% */
 }
 
 .rights_and_info_bottom {
