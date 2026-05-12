@@ -86,6 +86,12 @@ def filter_docs(include_list = [], exclude_list = ['jazz']): # Are the lists fil
     doc_list = get_doc_list('doc_list.json')
     label_dict = link_label_to_docs(doc_list)
 
+    match_label_list = list(set(include_list).intersection(exclude_list))
+    if len(match_label_list) > 0:
+        for label in match_label_list:
+            include_list.remove(label)
+            exclude_list.remove(label)
+
     # Checks if both filter lists have no elements
     if len(include_list) < 1:
         new_doc_list = doc_list
