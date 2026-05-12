@@ -305,6 +305,19 @@ def lambda_handler(event, context):
                 "body": json.dumps({"message": "CORS preflight OK"})
             }
         if method == "POST":
+            # Begin possible fix
+            body_str = event.get("body", "{}")
+            try:
+                print("In newly added section")
+                body = json.loads(body_str)
+            except json.JSONDecodeError:
+                return {
+                    "statusCode": 400,
+                    "headers": cors_headers(),
+                    "body": json.dumps({"error": "Invalid JSON in request body"})
+                }
+            # End possible fix
+
             data = body.get("message")
             inc_list_q = body.get("inc_list_json_ver", [])
             exc_list_q = body.get("exc_list_json_ver", [])
