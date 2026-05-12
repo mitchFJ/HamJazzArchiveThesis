@@ -37,13 +37,20 @@ def filter_docs(include_list = [], exclude_list = []): # Are the lists files or 
     new_doc_list = []
     label_dict = fll.link_label_to_docs(doc_list)
 
-    # Checks if both filter lists have no elements
+    # Checks if both label lists have matching labels
+    match_label_list = list(set(include_list).intersection(exclude_list))
+    if len(match_label_list) > 0:
+        for label in match_label_list:
+            include_list.remove(label)
+            exclude_list.remove(label)
+
+    # Checks if include filter list has no elements
     if len(include_list) < 1:
         new_doc_list = doc_list
     else:
         check_include(new_doc_list, include_list, label_dict)
     
-    # Check if documents have exclude filters
+    # Check if exclude filter list has elements
     if len(exclude_list) > 0:
         check_exclude(new_doc_list, exclude_list, label_dict)
     
