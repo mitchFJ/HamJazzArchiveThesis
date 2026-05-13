@@ -92,8 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             new_check_clone = new_check.cloneNode(true);
             new_label_clone = new_label.cloneNode(true);
-            // Make sure to update names and ids for exclude
-            // lol forgot to do this before testing no wonder
             new_check_clone.setAttribute("name","exclude_tag");
             new_check_clone.setAttribute("id","exclude_tag_"+tag_list[x].toLowerCase());
             new_label_clone.setAttribute("id","exclude_label_"+tag_list[x].toLowerCase());
@@ -109,11 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
             new_li_elem.textContent = tag_list[x];
             new_li_elem.classList.add('hidden');
             new_li_elem.classList.add('searchedTagItem');
-            //tabindex="0"
             new_li_elem.setAttribute("tabindex","0")
             iTL_init.appendChild(new_li_elem);
             var new_li_elem_copy = new_li_elem.cloneNode(true);
-            //new_li_elem_copy.classList.add('hidden');
             eTL_init.appendChild(new_li_elem_copy);
             tag_list_master.push(tag_list[x]);
         }
@@ -123,8 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var show_exc_button = show_inc_button.cloneNode(true);
         inc_place.appendChild(show_inc_button);
         exc_place.appendChild(show_exc_button);
-        // console.log("HIIIIIIII")
-        // console.log(place_children[place_children.length-1])
         show_inc_button.addEventListener('click', function(){
             var place_children = Array.from(inc_place.children).slice(2,inc_place.children.length-1);
             for (var index = 0; index < place_children.length; index++){
@@ -167,9 +161,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var clicked_label_to_be_shown = document.getElementById("include_label_"+searched_text_cont.toLowerCase());
         clicked_tag_to_be_shown.classList.remove('hidden');
         clicked_label_to_be_shown.classList.remove('hidden');
-        // displayed_tags_inc+=1;
-        // console.log("Disp_tags_inc"+displayed_tags_inc)
-        // clicked_tag_to_be_shown.checked = !clicked_tag_to_be_shown.checked;
         clicked_tag_to_be_shown.click();
         if (clicked_tag_to_be_shown.checked){
             displayed_tags_inc+=1;
@@ -209,43 +200,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.startViewTransition(() => {
                     inc_place.insertBefore(incl_label_focused,inc_place.children[2]);
                     inc_place.insertBefore(incl_tag_focused,inc_place.children[2]);
-
-                    // console.log("Displayed Tags Inc: "+displayed_tags_inc);
-                    // console.log("Index: "+(2))
-                    // var temp_inc_plac_chil = Array.from(inc_place.children).slice(2,inc_place.children.length-1);
-                    // for (var test = 0; test < temp_inc_plac_chil.length; test++){
-                    //     console.log(temp_inc_plac_chil[test].id)
-                    // }
-                    // console.log("01")
-                    // console.log(temp_inc_plac_chil[0].id);
-                    // console.log(temp_inc_plac_chil[1].id);
                 });
             }
             else{
                 incl_tag_focused = clicked_inc_elem;
                 incl_label_focused = document.getElementById("include_label_"+id_spef);
-                // console.log("Index: "+(2+(inc_checked_counter*2)));
                 var temp_inc_plac_chil = Array.from(inc_place.children).slice(2+(inc_checked_counter*2),inc_place.children.length-1);
-                // for (var test = 0; test < temp_inc_plac_chil.length; test++){
-                //     console.log(temp_inc_plac_chil[test].id)
-                // }
-                // console.log("01")
-                // console.log(temp_inc_plac_chil[0].id);
-                // console.log(temp_inc_plac_chil[1].id);
                 for (var inc_lab_ind = 0; inc_lab_ind < temp_inc_plac_chil.length; inc_lab_ind++){
                     if (inc_lab_ind%2!=0){
-                        // console.log(temp_inc_plac_chil[inc_lab_ind].id);
-                        // console.log(incl_label_focused.id);
                         if (temp_inc_plac_chil[inc_lab_ind].id>incl_label_focused.id){
-                            // console.log("Found insert at: "+(inc_lab_ind+1+inc_checked_counter*2));
-                            // console.log(inc_place.children[inc_lab_ind+1+inc_checked_counter*2].id)
                             inc_place.insertBefore(incl_label_focused,inc_place.children[inc_lab_ind+1+inc_checked_counter*2]);
-                            // console.log("Found insert at: "+(inc_lab_ind+inc_checked_counter*2));
-                            // console.log(inc_place.children[inc_lab_ind+inc_checked_counter*2].id)
                             inc_place.insertBefore(incl_tag_focused,inc_place.children[inc_lab_ind+inc_checked_counter*2]);
-                            // console.log("new place: "+inc_lab_ind+" "+(inc_lab_ind+1))
-                            // console.log(displayed_tags_inc*2)
-                            // console.log(max_displayed_tags*2)
                             if (displayed_tags_inc*2>max_displayed_tags*2 && !inc_showing_more){
                                 incl_tag_focused.classList.add("hidden");
                                 incl_label_focused.classList.add("hidden");
@@ -359,8 +324,6 @@ document.addEventListener('DOMContentLoaded', function() {
         show_res_num.textContent = results_found.length + " results found. Displaying page "+((curr_first_result/max_results_displayed)+1)+" of "+Math.ceil(FULL_RESULTS.length/max_results_displayed)+"; Results "+(curr_first_result+1)+" - " + (curr_last_result) + ".";
         res_container.append(show_res_num)
 
-        // res_counter<max_res_displ
-        // WITHIN: res_counter+curr_first_res
         for (var res_counter = 0; res_counter < max_results_displayed && res_counter+curr_first_result<curr_last_result; res_counter++){
             var clone_result_block = new_result_block.cloneNode(true);
             var clone_link = new_link.cloneNode(true);
@@ -422,7 +385,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     for (var pag_but_ind in only_placs) {
                         var pag_but_plac = only_placs[pag_but_ind]
                         if (pag_but_plac.textContent == ind_of_page || (ind_of_page == 1 && pag_but_plac.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
-                            // console.log("Functional on "+pag_but_plac.textContent+".")
                             pag_but_plac.classList.remove("hidden")
                         }
                         else if (!pag_but_plac.classList.contains("hidden")){
@@ -434,11 +396,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     var only_buttons = document.getElementsByClassName("page_button");
                     only_buttons = Array.from(only_buttons)
                     
-                    // console.log(ind_of_page)
                     for (var pag_but_ind in only_buttons) {
                         var pag_but = only_buttons[pag_but_ind]
                         if (pag_but.textContent == ind_of_page || (ind_of_page == 1 && pag_but.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but.textContent == "Next ->")){
-                            // console.log("Functional on "+pag_but.textContent+".")
                             pag_but.classList.add("hidden")
                         }
                         else if (pag_but.classList.contains("hidden")){
@@ -470,7 +430,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     for (var pag_but_ind in only_placs) {
                         var pag_but_plac = only_placs[pag_but_ind]
                         if (pag_but_plac.textContent == clicked_button.textContent || (clicked_button.textContent == 1 && pag_but_plac.textContent == "<- Prev") || (clicked_button.textContent == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
-                            // console.log("Functional on "+pag_but_plac.textContent+".")
                             pag_but_plac.classList.remove("hidden")
                         }
                         else if (!pag_but_plac.classList.contains("hidden")){
@@ -485,7 +444,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     for (var pag_but_ind in only_buttons) {
                         var pag_but = only_buttons[pag_but_ind]
                         if (pag_but.textContent == clicked_button.textContent || (clicked_button.textContent == 1 && pag_but.textContent == "<- Prev") || (clicked_button.textContent == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but.textContent == "Next ->")){
-                            // console.log("Functional on "+pag_but.textContent+".")
                             pag_but.classList.add("hidden")
                         }
                         else if (pag_but.classList.contains("hidden")){
@@ -519,7 +477,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     for (var pag_but_ind in only_placs) {
                         var pag_but_plac = only_placs[pag_but_ind];
                         console.log(pag_but_plac.textContent);
-                        // console.log(pag_but_plac.textContent == ind_of_page);
                         if (pag_but_plac.textContent == ind_of_page || (ind_of_page == 1 && pag_but_plac.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but_plac.textContent == "Next ->")){
                             console.log("Functional on "+pag_but_plac.textContent+".")
                             pag_but_plac.classList.remove("hidden")
@@ -536,7 +493,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log(ind_of_page)
                     for (var pag_but_ind in only_buttons) {
                         var pag_but = only_buttons[pag_but_ind]
-                        // console.log(pag_but)
                         console.log(pag_but.textContent)
                         console.log(pag_but.textContent == ind_of_page)
                         if (pag_but.textContent == ind_of_page || (ind_of_page == 1 && pag_but.textContent == "<- Prev") || (ind_of_page == Math.ceil(FULL_RESULTS.length/max_results_displayed) && pag_but.textContent == "Next ->")){
@@ -563,7 +519,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var exc_list = [];
         console.log("tag_list_master length: " + tag_list_master.length)
         for (var check_count = 0; check_count < tag_list_master.length; check_count++) {
-            //console.log(tag_list_master[check_count])
             var curr_checkbox_inc = document.getElementById("include_tag_"+tag_list_master[check_count].toLowerCase());
             var curr_checkbox_exc = document.getElementById("exclude_tag_"+tag_list_master[check_count].toLowerCase());
             if (curr_checkbox_inc && curr_checkbox_inc.checked) {
@@ -619,22 +574,11 @@ document.addEventListener('DOMContentLoaded', function() {
         all_search_buttons[search_button_enum].addEventListener("click", search_archive);
     }
     document.getElementById("searchBar").addEventListener('keydown', function(event){
-        // console.log("Almost there");
         if (event.key == 'Enter'){
-            // console.log('WORKING HOORAY YIPPEE');
             this.blur();
             search_archive();
         }
     })
-
-    // var all_page_buttons = document.getElementsByClassName("page_button");
-    // for (let page_button_indiv in all_page_buttons) {
-    //     page_button_indiv.addEventListener("click", function(event){
-    //         curr_first_result = event.target.textContent;
-    //         console.log("NOW: "+ curr_first_result);
-    //         // set_up_results(FULL_RESULTS);
-    //     });
-    // }
 
     function make_database_connection(query, inc_list, exc_list){
         console.log("using run_search_funct")
@@ -658,7 +602,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Printing our field of our response
             console.log(`Title of our response :  ${string.title}`);
             FULL_RESULTS = string.answer;
-            // page_buttons_loaded = false;
             curr_first_result = 0;
             set_up_results(string.answer);
         })
