@@ -2,6 +2,7 @@
 import csv
 import glob
 import json
+import re
 
 # To find docs
 output_file_path = 'Data/doc_list.json'
@@ -13,91 +14,64 @@ doc_name = 'label'
 labels_name = 'subject_topical'
 doc_type = 'genre'
 
+# Generates a doc object to compile necessary doc information
+class Doc:
+    def __init__(self, uuid, doc_name, doc_type, doc_path, label_list):
+        self.id = uuid
+        self.name = doc_name
+        self.type = doc_type
+        self.path = doc_path
+        self.subject_topical = label_list
+        pass
+
 # Gives the document path in the project
 def get_doc_path(doc_identifier):
-    doc_path = 'Data/Transcripts/output/'
+    directory_path = 'Data/Transcripts/output/'
     ext = '.pdf'
 
-    return doc_path + doc_identifier + ext
+    return directory_path + doc_identifier + ext
 
 # Gets the list of labels
 def get_label_list(labels_str):
-    label_str = labels_str[2:len(labels_str) - 2]
-    labels_list = label_str.split('},{')
+    # Cleans up the string to get the labels
+    cut_start = labels_str.index('\":\"') + len('\":\"')
+    cut_end = re.search(r'\",\"uri\":\"[^"]*\"}]', labels_str).start()
+    labels_str = labels_str[cut_start:cut_end]
+    
+    # Splits string to get individual labels
+    labels_list = re.split(r'\",\"uri\":\"[^"]*\"},{\"label\":\"', labels_str)
 
     return labels_list
 
-# Gets the documents from the CSV
-def create_doc_list(json_file_path):
-    doc_list = {}
+# Combines Transcript information from CSV files into one dictionary
+def combine_csvs():
+    doc_list = []
+    csv_files = glob.glob('Data/Transcript_List/*.csv')
 
-    with open(json_file_path, newline='') as f:
-        data = json.load(f)
-
-    for row in data:
-        doc_path = get_doc_path(row[doc_identifier][2:len(row[doc_identifier]) - 2])
-        label_list = get_label_list(row[labels_name])
-        doc_list = {**doc_list, doc_path: dict(id = row[uuid], name = row[doc_name], type = row[doc_type], path = doc_path, subject_topical = label_list)}
+    for file in csv_files:
+        with open(file, 'r') as input:
+            reader = csv.DictReader(input)
+            for row in reader:
+                doc_list.append(row)
 
     return doc_list
 
+# Creates a JSON file for the Doc List
 def create_json(doc_list, output_file_path):
     with open(output_file_path, mode='w', newline='') as f:
         json.dump(doc_list, f, indent=2, default=lambda x: list(x) if isinstance(x, tuple) else str(x))
     return
 
-# CITE: https://pytutorial.com/how-to-merge-multiple-csv-files-in-python-complete-guide/
-def combine_csvs():
-    new_json = 'Data/Jazz_Interviews_Doc_List.json'
-    doc_list = []
-    csv_files = glob.glob('Data/Transcript_List/*.csv')
+# Creates a doc list JSON file for other programs to reference from
+def create_doc_list():
+    doc_list = {}
+    data = combine_csvs()
 
-    with open(new_json, 'w', newline='') as output:
-        for file in csv_files:
-            with open(file, 'r') as input:
-                reader = csv.DictReader(input)
-                for row in reader:
-                    doc_list.append(row)
-        json.dump(doc_list, output, indent=2, default=lambda x: list(x) if isinstance(x, tuple) else str(x))
+    for row in data:
+        doc_path = get_doc_path(row[doc_identifier][2:len(row[doc_identifier]) - 2])
+        label_list = get_label_list(row[labels_name])
+        doc_list = {**doc_list, doc_path: Doc(row[uuid], row[doc_name], row[doc_type], doc_path, label_list).__dict__}
 
-    return
-
-def scrape_labels(csv_path):
-    new_file_name = 'Data/scraped_labels.txt'
-    label_list = []
-
-    # CITE: https://www.geeksforgeeks.org/python/create-a-new-text-file-in-python/
-    with open(new_file_name, 'w') as file:
-        # CITE: https://docs.python.org/3/library/csv.html
-        with open(csv_path, newline='') as csv_file:
-            csv_reader = csv.DictReader(csv_file)
-
-            for row in csv_reader:
-                topicals = row['subject_topical']
-                topicals = topicals[2:len(topicals)-2]
-
-                topical_list = topicals.split('},{')
-
-                for label in topical_list:
-                    str_start = '"label":"'
-
-                    label = label[len(str_start):label.find('",')]
-
-                    if label not in label_list:
-                        label_list.append(label)
-
-            file.write("\n".join(label_list))
-
-    return
-
-def get_all_docs():
-    new_file_name = 'Data/all_transcripts.txt'
-    doc_list = []
-
-    # CITE: https://www.geeksforgeeks.org/python/create-a-new-text-file-in-python/
-    with open(new_file_name, 'w') as file:
-        doc_list = glob.glob('Data/Transcripts/*.pdf')
-
-        file.write("\n".join(doc_list))
+    create_json(doc_list, output_file_path)
 
     return

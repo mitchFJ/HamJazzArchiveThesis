@@ -23,12 +23,30 @@ app = Flask(__name__)
 CORS(app)
 
 # --- TEMPORARY FIX/TEST: filtering_label_list.py ---
-label_list_file_path = '../Data/scraped_labels.txt'
+# Gets the information from doc list JSON file
+def get_doc_dict(input_file_path):
+    with open(input_file_path, mode='r') as f:
+        data = json.load(f)
 
-def set_doc_to_labels(doc, label_dict):
-    # print(doc)
-    for label in doc['subject_topical']:
-        key = label[:label.find(',')]
+    return data
+
+# Creates a label dictionary for the document paths to be stored
+def create_label_dict(label_list_txt = '../Data/scraped_labels.txt'):
+    label_dict = {}
+
+    with open(label_list_txt) as f:
+        labels_list = f.readlines()
+    
+    for label in labels_list:
+        if '\n' in label:
+            label = label[:len(label) - 1]
+        label_dict.update({label: []})
+
+    return label_dict
+
+# Sets the doc path to the doc's corresponding labels in the label dictionary for ease of searching
+def set_doc_to_labels(doc, doc_list, label_dict):
+    for key in doc_list[doc]['subject_topical']:
         if len(label_dict[key]) < 1:
             new_doc_list = [doc]
         else:
@@ -37,82 +55,52 @@ def set_doc_to_labels(doc, label_dict):
         label_dict.update({key: new_doc_list})
     return
 
-def create_label_dict():
-    label_dict = {}
-
-    with open(label_list_file_path) as f:
-        labels_list = f.readlines()
-    
-    for label in labels_list:
-        if '\n' in label:
-            label = label[:len(label) - 1]
-        label = '\"label\":\"' + label + '\"'
-        label_dict.update({label: []})
-
-    return label_dict
-
+# Links each doc to each entry in the label dictionary
 def link_label_to_docs(doc_list, label_dict = create_label_dict()):
     for doc in doc_list:
-        set_doc_to_labels(doc, label_dict)
+        set_doc_to_labels(doc, doc_list, label_dict)
     return label_dict
 # --- End filtering_label_list.py ---
 
 # --- TEMPORARY FIX/TEST: filter_sys.py ---
-def get_doc_list(input_file_path):
-    with open(input_file_path, mode='r') as f:
-        data = json.load(f)
-
-    return data
-
-# Filters out the document list
-def check_include(new_doc_list, label_list, label_dict):
-    # Checks through each doc to see if a label is in the doc_list
+# Filters in documents that have the labels in the given label list
+def check_include(new_doc_list, label_list, doc_list, label_dict):
+    # Checks through each doc to see if a label is in the doc list
     for label in label_list:
-        label = '\"label\":\"' + label + '\"'
-        
         for doc in label_dict[label]:
-            if doc not in new_doc_list:
-                new_doc_list.append(doc)
-
+            if doc_list[doc] not in new_doc_list:
+                new_doc_list.append(doc_list[doc])
     return
 
-# Filters out the document list
-def check_exclude(new_doc_list, label_list, label_dict):
+# Filters out documents that have the labels in the given label list
+def check_exclude(new_doc_list, label_list, doc_list, label_dict):
     # Checks through each doc to see if a label is in the doc_list
     for label in label_list:
-        label = '\"label\":\"' + label + '\"'
-
         for doc in label_dict[label]:
-            if doc in new_doc_list:
-                new_doc_list.remove(doc)
-
+            if doc_list[doc] in new_doc_list:
+                new_doc_list.remove(doc_list[doc])
     return
 
 # Checks to see if there are any filters active in the documents
-def filter_docs(include_list = [], exclude_list = ['jazz']): # Are the lists files or lists?
+def filter_docs(include_list = [], exclude_list = []):
+    # Variables for the program to function
     new_doc_list = []
-    doc_list = get_doc_list('../Data/doc_list.json')
+    doc_list = get_doc_dict('../Data/doc_list.json')
     label_dict = link_label_to_docs(doc_list)
 
     # Checks if both filter lists have no elements
-    if len(include_list) < 1:
-        new_doc_list = doc_list
-    else:
-        check_include(new_doc_list, include_list, label_dict)
-    
-    # Check if documents have exclude filters
-    if len(exclude_list) >= 1:
-        check_exclude(new_doc_list, exclude_list, label_dict)
+    ## Check if there are include filters
+    if len(include_list) > 0:
+        check_include(new_doc_list, include_list, doc_list, label_dict)
+    ## Check if documents have exclude filters
+    if len(exclude_list) > 0:
+        check_exclude(new_doc_list, exclude_list, doc_list, label_dict)
+
+    # Checks if the document list is empty
+    if len(new_doc_list) < 1:
+        new_doc_list = list(doc_list.values())
     
     return new_doc_list
-
-def create_txt(doc_list):
-    new_file_name = '../Data/filtered_doc_list.json'
-
-    with open(new_file_name, 'w') as file:
-        file.write("\n".join(doc_list))
-    
-    return
 # --- End filter_sys.py ---
 
 # Search funct class - BEGIN
@@ -145,16 +133,18 @@ class jazzDataModule():
         self.url_list = []
         self.encode_list = []
         self.name_list = []
-        # print("------TEST-------")
-        for pdf in valid_pdfs:
-            # print(type(pdf))
-            for i in data[pdf["path"]]:
-                self.sentences.append(sentences[i])
-                self.page_list.append(page_list[i])
-                self.encode_list.append(encode_list[i])
-                self.url_list.append(URL_START + url_list[i] + PAGE_SELECT)
-                self.name_list.append(name_list[i])
 
+        for pdf in valid_pdfs:
+            try:
+                for i in data[pdf["path"]]:
+                    self.sentences.append(sentences[i])
+                    self.page_list.append(page_list[i])
+                    self.encode_list.append(encode_list[i])
+                    self.url_list.append(URL_START + url_list[i] + PAGE_SELECT)
+                    self.name_list.append(name_list[i])
+            except KeyError:
+                pass
+    
     def evaluate_query(self, query):
         query_encode = self.tokenize(query).astype(np.float64)
         
