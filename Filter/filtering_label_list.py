@@ -1,8 +1,8 @@
 label_list_file_path = 'Data/scraped_labels.txt'
 
-def set_doc_to_labels(doc, label_dict):
+def set_doc_to_labels(doc, doc_list, label_dict):
     print(doc)
-    for label in doc['subject_topical']:
+    for label in doc_list[doc]['subject_topical']:
         key = label[:label.find(',')]
         if len(label_dict[key]) < 1:
             new_doc_list = [doc]
@@ -28,5 +28,5 @@ def create_label_dict():
 
 def link_label_to_docs(doc_list, label_dict = create_label_dict()):
     for doc in doc_list:
-        set_doc_to_labels(doc, label_dict)
+        set_doc_to_labels(doc, doc_list, label_dict)
     return label_dict

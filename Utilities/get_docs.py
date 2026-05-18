@@ -29,7 +29,7 @@ def get_label_list(labels_str):
 
 # Gets the documents from the CSV
 def create_doc_list(json_file_path):
-    doc_list = []
+    doc_list = {}
 
     with open(json_file_path, newline='') as f:
         data = json.load(f)
@@ -37,7 +37,7 @@ def create_doc_list(json_file_path):
     for row in data:
         doc_path = get_doc_path(row[doc_identifier][2:len(row[doc_identifier]) - 2])
         label_list = get_label_list(row[labels_name])
-        doc_list.append(dict(id = row[uuid], name = row[doc_name], type = row[doc_type], path = doc_path, subject_topical = label_list))
+        doc_list = {**doc_list, doc_path: dict(id = row[uuid], name = row[doc_name], type = row[doc_type], path = doc_path, subject_topical = label_list)}
 
     return doc_list
 
@@ -87,5 +87,17 @@ def scrape_labels(csv_path):
                         label_list.append(label)
 
             file.write("\n".join(label_list))
+
+    return
+
+def get_all_docs():
+    new_file_name = 'Data/all_transcripts.txt'
+    doc_list = []
+
+    # CITE: https://www.geeksforgeeks.org/python/create-a-new-text-file-in-python/
+    with open(new_file_name, 'w') as file:
+        doc_list = glob.glob('Data/Transcripts/*.pdf')
+
+        file.write("\n".join(doc_list))
 
     return
