@@ -10,15 +10,14 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
 
-# Websire Communication Setup - App and CSV path
+# Website Communication Setup - App and CSV path
 app = Flask(__name__)
 CORS(app)
 
-# --- TEMPORARY FIX/TEST: filtering_label_list.py ---
+# --- filtering_label_list.py ---
 label_list_file_path = 'scraped_labels.txt'
 
 def set_doc_to_labels(doc, label_dict):
-    # print(doc)
     for label in doc['subject_topical']:
         key = label[:label.find(',')]
         if len(label_dict[key]) < 1:
@@ -49,7 +48,7 @@ def link_label_to_docs(doc_list, label_dict = create_label_dict()):
     return label_dict
 # --- End filtering_label_list.py ---
 
-# --- TEMPORARY FIX/TEST: filter_sys.py ---
+# --- filter_sys.py ---
 def get_doc_list(input_file_path):
     with open(input_file_path, mode='r') as f:
         data = json.load(f)
@@ -81,7 +80,7 @@ def check_exclude(new_doc_list, label_list, label_dict):
     return
 
 # Checks to see if there are any filters active in the documents
-def filter_docs(include_list = [], exclude_list = ['jazz']): # Are the lists files or lists?
+def filter_docs(include_list = [], exclude_list = ['jazz']):
     new_doc_list = []
     doc_list = get_doc_list('doc_list.json')
     label_dict = link_label_to_docs(doc_list)
@@ -143,9 +142,7 @@ class jazzDataModule():
         self.url_list = []
         self.encode_list = []
         self.name_list = []
-        # print("------TEST-------")
         for pdf in valid_pdfs:
-            # print(type(pdf))
             for i in data[pdf["path"]]:
                 self.sentences.append(sentences[i])
                 self.page_list.append(page_list[i])
@@ -258,25 +255,13 @@ def get_list_of_labels():
     label_list = []
     with open('scraped_labels.txt', 'r') as file:
         label_list = file.read().splitlines()
-    # with open(file_name, newline='') as csv_file:
-    #     csv_reader = csv.DictReader(csv_file)
-    #     for row in csv_reader:
-    #         include_docs.append(dict(label = row[doc_name], subject_topical = row[labels_name]))
-    #         print(row[labels_name])
-    #         labels_here = json.loads(row[labels_name])
-    #         for index in range(len(labels_here)):
-    #             print(f"INDEXth: {labels_here[index]}")
-    #             print(f"       : {labels_here[index]['label']}")
-    #             if labels_here[index]['label'] not in label_list:
-    #                 label_list.append(labels_here[index]['label'])
-    #             else:
-    #                 print("         -Already included.-")
     for label in label_list:
         print(label, end=', ')
     print()
     return label_list
 
 # Filter-related code - END -
+
 # --- Lambda handler ---
 def cors_headers():
     return {

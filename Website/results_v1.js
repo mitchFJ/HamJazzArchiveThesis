@@ -1,3 +1,7 @@
+// Reagan Mor
+// results.js
+// Handles all website function and makes calls to backend.
+
 document.addEventListener('DOMContentLoaded', function() {
     var coll = document.getElementsByClassName("collapsible");
     var collapsi;

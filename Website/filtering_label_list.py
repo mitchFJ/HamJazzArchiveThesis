@@ -1,3 +1,5 @@
+# File is extraneous at this point - useful for development, but necessary content is transferred to jazzDataModule.py or app.py
+
 label_list_file_path = 'Data/scraped_labels.txt'
 
 def set_doc_to_labels(doc, label_dict):

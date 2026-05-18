@@ -1,3 +1,5 @@
+# File is extraneous at this point - useful for development, but necessary content is transferred to jazzDataModule.py or app.py
+
 import filtering_label_list as fll
 import json
 

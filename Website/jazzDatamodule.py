@@ -1,3 +1,8 @@
+# Reagan Mor
+# jazzDataModule.py
+# Backend. Runs the search algorithm, handles GET call for filter.
+# Essentially the same function as app.py, but used for local connection and launch.
+
 from pypdf import PdfReader
 
 from sentence_transformers import SentenceTransformer, util
@@ -13,7 +18,7 @@ from flask_cors import CORS
 import csv
 import json
 
-# Websire Communication Setup - App and CSV path
+# Website Communication Setup - App and CSV path
 app = Flask(__name__)
 CORS(app)
 
@@ -255,19 +260,6 @@ def get_list_of_labels():
     label_list = []
     with open('../Data/scraped_labels.txt', 'r') as file:
         label_list = file.read().splitlines()
-    # with open(file_name, newline='') as csv_file:
-    #     csv_reader = csv.DictReader(csv_file)
-    #     for row in csv_reader:
-    #         include_docs.append(dict(label = row[doc_name], subject_topical = row[labels_name]))
-    #         print(row[labels_name])
-    #         labels_here = json.loads(row[labels_name])
-    #         for index in range(len(labels_here)):
-    #             print(f"INDEXth: {labels_here[index]}")
-    #             print(f"       : {labels_here[index]['label']}")
-    #             if labels_here[index]['label'] not in label_list:
-    #                 label_list.append(labels_here[index]['label'])
-    #             else:
-    #                 print("         -Already included.-")
     for label in label_list:
         print(label, end=', ')
     print()
