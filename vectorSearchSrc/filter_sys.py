@@ -30,7 +30,7 @@ def check_exclude(new_doc_list, label_list, doc_list, label_dict):
 def filter_docs(include_list = [], exclude_list = []):
     # Variables for the program to function
     new_doc_list = []
-    doc_list = get_doc_dict('../Data/doc_list.json')
+    doc_list = get_doc_dict('Data/doc_list.json')
     label_dict = fll.link_label_to_docs(doc_list)
 
     # Checks if both filter lists have no elements

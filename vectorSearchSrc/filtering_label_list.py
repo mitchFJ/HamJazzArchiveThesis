@@ -1,5 +1,5 @@
 # Creates a label dictionary for the document paths to be stored
-def create_label_dict(label_list_txt = '../Data/scraped_labels.txt'):
+def create_label_dict(label_list_txt = 'Data/scraped_labels.txt'):
     label_dict = {}
 
     with open(label_list_txt) as f:

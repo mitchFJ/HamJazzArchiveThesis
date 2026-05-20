@@ -18,3 +18,5 @@ def scrape_labels(doc_list_path = 'Data/doc_list.json'):
         file.write("\n".join(label_list))
 
     return
+
+scrape_labels()
