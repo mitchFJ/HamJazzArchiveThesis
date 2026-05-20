@@ -4,7 +4,7 @@ labels_name = 'subject_topical'
 
 # Scrapes Labels from the generated Doc List JSON
 def scrape_labels(doc_list_path = 'Data/doc_list.json'):
-    new_file_name = 'Data/new_scraped_labels.txt'
+    new_file_name = 'Data/scraped_labels.txt'
     label_list = []
 
     with open(doc_list_path, newline='') as list_file:
