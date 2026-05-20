@@ -21,3 +21,5 @@ To upload to AWS:
 6. Create the docker image with "docker build --platform linux/amd64 --provenance=false -t <ecr name> ."
 7. Tag the docker image with "docker tag <ecr name> <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<ecr name>:latest"
 8. Push the docker image to AWS with "docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<ecr name>:latest"
+
+A temporary link to this code can be found here: http://fillius-jazz-archive-014467817391-us-east-2-an.s3-website.us-east-2.amazonaws.com
